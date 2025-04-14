@@ -105,6 +105,9 @@ export default function Analysis() {
       <Match when={analysis() && analysisType() == "inclinometer_array"}>
         <AnalysisInclinometerArray apiId={apiId()} analysis={analysis} />
       </Match>
+      <Match when={analysis() && analysisType() == "scl3300_array"}>
+        <AnalysisInclinometerArray apiId={apiId()} analysis={analysis} />
+      </Match>
     </Switch>
     </>
   );
