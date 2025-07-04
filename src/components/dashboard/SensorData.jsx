@@ -16,8 +16,8 @@ export default function SensorData(props) {
   const initViewMode = searchParams.view ? searchParams.view : config("view_mode") ? config("view_mode") : "table";
   const initTimeMode = searchParams.time ? searchParams.time : "live";
   const initTimeLast= searchParams.last ? parseInt(searchParams.last) : config("live_range") ? config("live_range") : 300000;
-  const initTimeBegin = searchParams.begin ? new Date(searchParams.begin) : new Date();
-  const initTimeEnd = searchParams.end ? new Date(searchParams.end) : new Date();
+  const initTimeBegin = searchParams.begin && new Date(searchParams.begin) < new Date() ? new Date(searchParams.begin) : new Date();
+  const initTimeEnd = searchParams.end&& new Date(searchParams.end) < new Date() ? new Date(searchParams.end) : new Date();
 
   let [viewMode, setViewMode] = createSignal(initViewMode);
   let [timeMode, setTimeMode] = createSignal(initTimeMode);
@@ -163,8 +163,8 @@ export default function SensorData(props) {
         end: datetimeEnd.value
       });
       if (datetimeBegin.value && datetimeEnd.value) {
-        setTimeBegin(new Date(datetimeBegin.value));
-        setTimeEnd(new Date(datetimeEnd.value));
+        if (new Date(datetimeBegin.value) < new Date()) setTimeBegin(new Date(datetimeBegin.value));
+        if (new Date(datetimeEnd.value) < new Date()) setTimeEnd(new Date(datetimeEnd.value));
       }
       refetch();
     }

@@ -5,7 +5,7 @@ import { resourceServer, dateToString } from "../../store";
 import DataTable from "../table/DataTable";
 import LineChart from "../chart/LineChart";
 
-export default function AnalysisSoilInclinometer(props) {
+export default function AnalysisInclinometerArray(props) {
 
   const config = (key) => {
     const analysis = props.analysis();
@@ -17,9 +17,9 @@ export default function AnalysisSoilInclinometer(props) {
   const initTimeMode = searchParams.time ? searchParams.time : "live";
   const initDataMode = searchParams.data ? searchParams.data : "old_new";
   const initTimeLast= searchParams.last ? parseInt(searchParams.last) : config("live_range") ? config("live_range") : 300000;
-  const initTimeBegin = searchParams.begin ? new Date(searchParams.begin) : new Date();
-  const initTimeEnd = searchParams.end ? new Date(searchParams.end) : new Date();
-  const initTimeSpecific = searchParams.specific ? new Date(searchParams.specific) : new Date();
+  const initTimeBegin = searchParams.begin && new Date(searchParams.begin) < new Date() ? new Date(searchParams.begin) : new Date();
+  const initTimeEnd = searchParams.end && new Date(searchParams.end) < new Date() ? new Date(searchParams.end) : new Date();
+  const initTimeSpecific = searchParams.specific && new Date(searchParams.specific) < new Date() ? new Date(searchParams.specific) : new Date();
 
   let [viewMode, setViewMode] = createSignal(initViewMode);
   let [timeMode, setTimeMode] = createSignal(initTimeMode);
@@ -261,11 +261,11 @@ export default function AnalysisSoilInclinometer(props) {
         specific: dataMode() == "specific" ? datetimeSpecific.value : null
       });
       if (datetimeBegin.value && datetimeEnd.value) {
-        setTimeBegin(new Date(datetimeBegin.value));
-        setTimeEnd(new Date(datetimeEnd.value));
+        if (new Date(datetimeBegin.value) < new Date()) setTimeBegin(new Date(datetimeBegin.value));
+        if (new Date(datetimeEnd.value) < new Date()) setTimeEnd(new Date(datetimeEnd.value));
       }
       if (datetimeSpecific.value) {
-        setTimeSpecific(new Date(datetimeSpecific.value));
+        if (new Date(datetimeSpecific.value) < new Date()) setTimeSpecific(new Date(datetimeSpecific.value));
       }
       refetch();
     }
