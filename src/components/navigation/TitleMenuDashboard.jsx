@@ -7,8 +7,8 @@ export default function TitleMenuDashboard() {
           <svg viewBox="0 0 300 300" class="w-6 h-6 text-gray-500 group-hover:text-sky-950 dark:group-hover:text-sky-100">
             <use href="/icon/dashboard.svg#landslide"></use>
           </svg>
-          <h1 class="h-full leading-[3.5rem] ml-1 mr-0.5 xs:ml-2 xs:mr-1 font-medium text-lg sm:hidden">Landslide Demo</h1>
-          <h1 class="h-full leading-[3.5rem] ml-1 mr-0.5 xs:ml-2 xs:mr-1 font-medium text-lg hidden sm:inline">Landslide Monitoring Demo</h1>
+          <h1 class="h-full leading-[3.5rem] ml-1 mr-0.5 xs:ml-2 xs:mr-1 font-medium text-lg sm:hidden">Landslide Monitoring</h1>
+          <h1 class="h-full leading-[3.5rem] ml-1 mr-0.5 xs:ml-2 xs:mr-1 font-medium text-lg hidden sm:inline">Landslide Monitoring</h1>
           <span class="icon-arrow_fill_down text-[1rem] text-sky-700"></span>
         </button>
       </div>
