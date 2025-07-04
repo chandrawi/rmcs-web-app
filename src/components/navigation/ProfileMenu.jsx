@@ -33,7 +33,7 @@ export default function ProfileMenu() {
           </span>
           <div class="w-9 h-9 relative rounded-full border-2 border-sky-700 flex items-center justify-center">
             <span class="icon-user_circle text-[2.25rem] text-sky-700"></span>
-            <span class="h-4 -mt-6 px-1 inline-block absolute left-6 align-middle text-gray-100 text-[0.6875rem] rounded-md bg-red-700">25</span>
+            {/* <span class="h-4 -mt-6 px-1 inline-block absolute left-6 align-middle text-gray-100 text-[0.6875rem] rounded-md bg-red-700">25</span> */}
           </div>
           <div class="hidden xs:flex flex-row items-center h-full pt-3 ml-1 -mr-2 ">
             <span class="icon-arrow_fill_down text-lg text-sky-700"></span>
@@ -52,14 +52,14 @@ export default function ProfileMenu() {
               <span class="icon-message text-[1rem] w-5"></span>
               <span class="ml-1.5">Message</span>
               <div class="grow h-full flex flex-row items-center justify-end">
-                <span class="h-4 px-1 bg-red-700 rounded-md text-[0.6875rem] text-gray-100">20</span>
+                {/* <span class="h-4 px-1 bg-red-700 rounded-md text-[0.6875rem] text-gray-100">20</span> */}
               </div>
             </a>
             <a href="/#/user/task" class="w-full h-8 px-3 flex flex-row items-center border-t border-slate-200 hover:text-sky-800 dark:border-slate-700 dark:hover:text-sky-300">
               <span class="icon-task text-[1.25rem] w-5"></span>
               <span class="ml-2">Task</span>
               <div class="grow h-full flex flex-row items-center justify-end">
-                <span class="h-4 px-1 bg-red-700 rounded-md text-[0.6875rem] text-gray-100">5</span>
+                {/* <span class="h-4 px-1 bg-red-700 rounded-md text-[0.6875rem] text-gray-100">5</span> */}
               </div>
             </a>
             <a href="/logout" class="w-full h-8 px-3 flex flex-row items-center border-t border-slate-200 hover:text-sky-800 dark:border-slate-700 dark:hover:text-sky-300">

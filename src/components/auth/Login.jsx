@@ -31,7 +31,7 @@ export default function Login() {
         resourceServer.setToken(access.api_id, access.access_token);
         resourceServer.setRefreshToken(access.api_id, access.refresh_token);
       }
-      navigate("/", {replace:true});
+      navigate("/dashboard/pge_1", {replace:true});
     }).catch((error) => {
       switch(error.message) {
         case "password does not match":
