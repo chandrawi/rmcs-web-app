@@ -88,7 +88,8 @@ export default function AnalysisSoilInclinometer(props) {
       return await read_data_set(resourceServer.get(props.apiId), {
         set_id: input.set_id,
         timestamp: timeSpecific()
-      });
+      })
+      .then((value) => [value]);
     }
   });
 
@@ -113,7 +114,7 @@ export default function AnalysisSoilInclinometer(props) {
             if (typeof dataSum[i] == "number") {
               dataSum[i] = dataSum[i] + dataset.data[i];
             } else {
-              dataSum[i] = 0;
+              dataSum[i] = dataset.data[i];
             }
           }
           number += 1;
@@ -158,7 +159,7 @@ export default function AnalysisSoilInclinometer(props) {
         cols[scale] = {
           content: scale + " [" + symbol + "]",
           sortable: true,
-          float_precission: config("float_precission")
+          float_precission: config("float_precission")[scale]
         }
       }
       return cols;
