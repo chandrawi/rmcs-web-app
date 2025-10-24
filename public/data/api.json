@@ -1,11 +1,11 @@
 {
   "auth": {
-    "address": "http://localhost:9001"
+    "address": "https://api-pge.gundala.co.id:8001"
   },
   "resource": [
     {
-      "address": "http://localhost:9002",
-      "id": "5bdb2939-c0e7-41df-946f-16252c6dfd5e"
+      "address": "https://api-pge.gundala.co.id:8002",
+      "id": "e984a5c7-5c91-451e-bc95-645938e6ba73"
     }
   ]
 }
