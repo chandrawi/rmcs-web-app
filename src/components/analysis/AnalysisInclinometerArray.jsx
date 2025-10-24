@@ -61,7 +61,7 @@ export default function AnalysisInclinometerArray(props) {
       let first_id = configs[0].device_id;
       for (const config of configs) {
         if (config.name == "space") {
-          position = position + config.value;
+          position = position - config.value;
           map[config.device_id] = position;
         }
       }
@@ -72,9 +72,10 @@ export default function AnalysisInclinometerArray(props) {
   const [dataset, {refetch}] = createResource(props.analysis, async (input) => {
     if (timeMode() == "live") {
       const tLast = new Date(Date.now() - timeLast());
-      return await list_data_set_by_last_time(resourceServer.get(props.apiId), {
+      return await list_data_set_by_range_time(resourceServer.get(props.apiId), {
         set_id: input.set_id,
-        timestamp: tLast
+        begin: tLast,
+        end: new Date(Date.now())
       });
     }
     else if (timeMode() == "history" && dataMode() != "specific") {

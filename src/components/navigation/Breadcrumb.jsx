@@ -50,10 +50,12 @@ export default function Breadcrumb(props) {
         <a href={setLink(props.parent.name, props.child1)} class="hover:text-sky-800 dark:hover:text-sky-300">
           {child1Text()}
         </a>
-        <span class="icon-arrow_fill_right text-[0.75rem] text-sky-800 dark:text-sky-300 px-1"></span>
+        <Show when={props.children2}>
+          <span class="icon-arrow_fill_right text-[0.75rem] text-sky-800 dark:text-sky-300 px-1"></span>
+        </Show>
       </Show>
 
-      <Show when={child1Text()}>
+      <Show when={child1Text() && props.children2}>
         <div class="dropdown min-w-24 h-full relative bg-sky-100 dark:bg-sky-950 text-sm rounded-sm">
           <button tabindex="0" class="group w-full h-full px-2 py-0.5 flex flex-row items-center justify-between text-gray-800 hover:text-sky-800 dark:text-gray-50 dark:hover:text-sky-300">
             <span class="w-full text-center">{child2Text() ? child2Text() : "————"}</span>
