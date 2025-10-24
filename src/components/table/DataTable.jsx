@@ -5,7 +5,7 @@ export default function DataTable(props) {
   const [sortDirection, setSortDirection] = createSignal({});
   const [currentPage, setCurrentPage] = createSignal(0);
   const [pageCount, setPageCount] = createSignal(1);
-  const [rowPerPages, setRowPerPages] = createSignal(10);
+  const [rowPerPages, setRowPerPages] = createSignal(20);
   const maxPagination = 10;
 
   // Create list of columns
@@ -170,8 +170,8 @@ export default function DataTable(props) {
           <label for="input-row" class="px-1.5 py-0.5 rounded-l-sm bg-slate-200 dark:bg-slate-700">Rows</label>
           <select name="rowNum" class="px-1 bg-white border border-slate-200 dark:bg-slate-800 dark:border-slate-700">
             <option value="5">5</option>
-            <option value="10" selected>10</option>
-            <option value="20">20</option>
+            <option value="10">10</option>
+            <option value="20" selected>20</option>
             <option value="50">50</option>
             <option value="100">100</option>
           </select>

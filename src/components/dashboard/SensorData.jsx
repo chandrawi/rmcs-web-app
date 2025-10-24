@@ -17,7 +17,7 @@ export default function SensorData(props) {
   const initTimeMode = searchParams.time ? searchParams.time : "live";
   const initTimeLast= searchParams.last ? parseInt(searchParams.last) : config("live_range") ? config("live_range") : 300000;
   const initTimeBegin = searchParams.begin && new Date(searchParams.begin) < new Date() ? new Date(searchParams.begin) : new Date();
-  const initTimeEnd = searchParams.end&& new Date(searchParams.end) < new Date() ? new Date(searchParams.end) : new Date();
+  const initTimeEnd = searchParams.end && new Date(searchParams.end) < new Date() ? new Date(searchParams.end) : new Date();
 
   let [viewMode, setViewMode] = createSignal(initViewMode);
   let [timeMode, setTimeMode] = createSignal(initTimeMode);
@@ -33,10 +33,11 @@ export default function SensorData(props) {
   const [data, {refetch} ] = createResource(props.sensor, async (input) => {
     if (timeMode() == "live") {
       const tLast = new Date(Date.now() - timeLast());
-      return await list_data_by_last_time(resourceServer.get(props.apiId), {
+      return await list_data_by_range_time(resourceServer.get(props.apiId), {
         device_id: input.device_id,
         model_id: input.model_id,
-        timestamp: tLast
+        begin: tLast,
+        end: new Date(Date.now())
       });
     }
     else if (timeMode() == "history") {
