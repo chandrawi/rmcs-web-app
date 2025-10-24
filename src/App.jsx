@@ -35,6 +35,7 @@ function App() {
           <Route path="/:name" component={Overview} />
           <Route path="/:name/overview" component={Overview} />
           <Route path="/:name/information" component={Information} />
+          <Route path="/:name/information/:submenu" component={Information} />
           <Route path="/:name/sensor" component={Sensor} />
           <Route path="/:name/sensor/:submenu" component={Sensor} />
           <Route path="/:name/sensor/:submenu/*rest" component={Sensor} />
