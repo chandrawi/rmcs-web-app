@@ -1,0 +1,117 @@
+{
+  "inclinometer": {
+    "text": "Inclinometer",
+    "icon": "icon-list_square",
+    "model_id": "054c454e-7cda-496a-8778-82e85b5f912e",
+    "model_index": [0, 1, 4],
+    "device_id": {
+      "Inclinometer_1": "1f81d099-4c6f-4929-8757-005f557de318",
+      "Inclinometer_2": "2b682489-4a02-4bb0-80c5-458f4a20d519",
+      "Inclinometer_3": "36ffe820-f54c-4f4d-b3e9-5ed4e3cab716",
+      "Inclinometer_4": "4d935490-a272-4aad-a60a-8438e10416a0",
+      "Inclinometer_5": "561fd4bf-d082-42be-b9d5-ffe5f121c1e4",
+      "Inclinometer_6": "6b0fe48f-1e3b-4e74-9dac-79c7fe9e4778",
+      "Inclinometer_7": "7aebed6a-af10-4875-82e5-b23647d58080",
+      "Inclinometer_8": "83f7db09-5353-462e-8635-1f4257ab5788"
+    },
+    "config": {
+      "live_ranges": [300000, 900000, 1800000, 3600000, 14400000, 43200000, 86400000],
+      "live_range": 3600000,
+      "view_mode": "graph",
+      "float_precission": 3,
+      "chart_value_range": [[1],[1]],
+      "max_lost": 900000
+    }
+  },
+  "displacement": {
+    "text": "Displacement",
+    "icon": "icon-list_square",
+    "model_id": "054c454e-7cda-496a-8778-82e85b5f912e",
+    "model_index": [2, 3],
+    "device_id": {
+      "Displacement_1": "1f81d099-4c6f-4929-8757-005f557de318",
+      "Displacement_2": "2b682489-4a02-4bb0-80c5-458f4a20d519",
+      "Displacement_3": "36ffe820-f54c-4f4d-b3e9-5ed4e3cab716",
+      "Displacement_4": "4d935490-a272-4aad-a60a-8438e10416a0",
+      "Displacement_5": "561fd4bf-d082-42be-b9d5-ffe5f121c1e4",
+      "Displacement_6": "6b0fe48f-1e3b-4e74-9dac-79c7fe9e4778",
+      "Displacement_7": "7aebed6a-af10-4875-82e5-b23647d58080",
+      "Displacement_8": "83f7db09-5353-462e-8635-1f4257ab5788"
+    },
+    "config": {
+      "live_ranges": [300000, 900000, 1800000, 3600000, 14400000, 43200000, 86400000],
+      "live_range": 3600000,
+      "view_mode": "graph",
+      "float_precission": 3,
+      "chart_value_range": [[1],[1]],
+      "max_lost": 900000
+    }
+  },
+  "piezometer": {
+    "text": "Piezometer",
+    "icon": "icon-list_square",
+    "model_id": "91b65b70-c421-42fa-8c54-16fc8bbed445",
+    "model_index": [0, 1],
+    "device_id": {
+      "Piezometer_1": "a735bf8d-774f-459b-8bef-19162a87e10a"
+    },
+    "config": {
+      "live_ranges": [300000, 900000, 1800000, 3600000, 14400000, 43200000, 86400000],
+      "live_range": 3600000,
+      "view_mode": "graph",
+      "float_precission": 3,
+      "chart_value_range": [[50],[5]],
+      "max_lost": 900000
+    }
+  },
+  "rain_gauge": {
+    "text": "Rain gauge",
+    "icon": "icon-list_square",
+    "model_id": "6a28ad85-0a32-41b8-acb5-ee92a523ec74",
+    "model_index": [0, 1, 2, 3],
+    "device_id": {
+      "Rain_Gauge_1": "beadaf4c-9e1c-46b5-8766-b20dcc60e4a7"
+    },
+    "config": {
+      "live_ranges": [300000, 900000, 1800000, 3600000, 14400000, 43200000, 86400000],
+      "live_range": 3600000,
+      "view_mode": "graph",
+      "chart_value_range": [[2],[2],[10],[10]],
+      "max_lost": 900000
+    }
+  },
+  "environment": {
+    "text": "Environment sensor",
+    "icon": "icon-list_square",
+    "model_id": "828feb1f-e46b-4242-b67d-20aba7c21282",
+    "model_index": [0, 1, 2],
+    "device_id": {
+      "Environment_Sensor_1": "c8e65519-da54-45de-993d-4aa68dd5c199"
+    },
+    "config": {
+      "live_ranges": [300000, 900000, 1800000, 3600000, 14400000, 43200000, 86400000],
+      "live_range": 3600000,
+      "view_mode": "graph",
+      "float_precission": 3,
+      "chart_value_range": [[10],[10],[50]],
+      "max_lost": 900000
+    }
+  },
+  "power_monitor": {
+    "text": "Power Monitor",
+    "icon": "icon-list_square",
+    "model_id": "cfe2c3d4-a44d-4ad9-8660-3c122e5caf89",
+    "model_index": [1, 2, 5, 6],
+    "device_id": {
+      "Power_Monitor": "18a1231d-8b76-48f8-9e94-f894f8512a59"
+    },
+    "config": {
+      "live_ranges": [300000, 900000, 1800000, 3600000, 14400000, 43200000, 86400000],
+      "live_range": 3600000,
+      "view_mode": "graph",
+      "float_precission": 3,
+      "chart_value_range": [[5],[1],[5],[1]],
+      "max_lost": 900000
+    }
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "inclinometer_array": {
+    "text": "Inclinometer array",
+    "icon": "icon-list_square",
+    "set_id": {
+      "Inclinometer_Array_1": "10f796e8-c134-4d56-8919-b83729de7368"
+    },
+    "config": {
+      "live_ranges": [300000, 900000, 1800000, 3600000, 14400000, 43200000, 86400000],
+      "live_range": 3600000,
+      "view_mode": "graph",
+      "float_precission": {"inclination-Y":5, "inclination-Z":5, "displacement-Y":3, "displacement-Z":3},
+      "chart_value_range": [[1],[1],[50],[50]],
+      "chart_domain_range": [[1000],[1000],[1000],[1000]],
+      "chart_domain": "y",
+      "max_lost": 900000
+    }
+  }
+}
