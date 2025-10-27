@@ -30,6 +30,9 @@ importers:
         specifier: ^1.8.11
         version: 1.8.11
     devDependencies:
+      '@tailwindcss/typography':
+        specifier: ^0.5.19
+        version: 0.5.19(tailwindcss@3.4.4)
       autoprefixer:
         specifier: ^10.4.19
         version: 10.4.19(postcss@8.4.38)
@@ -578,6 +581,11 @@ packages:
     peerDependencies:
       solid-js: ^1.8.6
 
+  '@tailwindcss/typography@0.5.19':
+    resolution: {integrity: sha512-w31dd8HOx3k9vPtcQh5QHP9GwKcgbMp87j58qi6xgiBnFFtKEAgCWnDw4qUT8aHwkCp8bKvb/KGKWWHedP0AAg==}
+    peerDependencies:
+      tailwindcss: '>=3.0.0 || insiders || >=4.0.0-alpha.20 || >=4.0.0-beta.1'
+
   '@types/babel__core@7.20.5':
     resolution: {integrity: sha512-qoQprZvz5wQFJwMDqeseRXWv3rqMvhgpbXFfVyWhbx9X47POIA6i/+dXefEmZKoAgOaTdaIgNSMqMIU61yRyzA==}
 
@@ -837,6 +845,9 @@ packages:
   google-protobuf@3.21.2:
     resolution: {integrity: sha512-3MSOYFO5U9mPGikIYCzK0SaThypfGgS6bHqrUGXG3DPHCrb+txNqeEcns1W0lkGfk0rCyNXm7xB9rMxnCiZOoA==}
 
+  google-protobuf@3.21.4:
+    resolution: {integrity: sha512-MnG7N936zcKTco4Jd2PX2U96Kf9PxygAPKBug+74LHzmHXmceN16MmRcdgZv+DGef/S9YvQAfRsNCn4cjf9yyQ==}
+
   grpc-web@1.5.0:
     resolution: {integrity: sha512-y1tS3BBIoiVSzKTDF3Hm7E8hV2n7YY7pO0Uo7depfWJqKzWE+SKr0jvHNIJsJJYILQlpYShpi/DRJJMbosgDMQ==}
 
@@ -1041,6 +1052,10 @@ packages:
     engines: {node: '>=12.0'}
     peerDependencies:
       postcss: ^8.2.14
+
+  postcss-selector-parser@6.0.10:
+    resolution: {integrity: sha512-IQ7TZdoaqbT+LCpShg46jnZVlhWD2w6iQYAcYXfHARZ7X1t/UGhhceQDs5X0cGqKvYlHNOuv7Oa1xmb0oQuA3w==}
+    engines: {node: '>=4'}
 
   postcss-selector-parser@6.1.0:
     resolution: {integrity: sha512-UMz42UD0UY0EApS0ZL9o1XnLhSTtvvvLe5Dc2H2O56fvRZi+KulDyf5ctDhhtYJBGKStV2FL1fy6253cmLgqVQ==}
@@ -1800,6 +1815,11 @@ snapshots:
     dependencies:
       solid-js: 1.8.11
 
+  '@tailwindcss/typography@0.5.19(tailwindcss@3.4.4)':
+    dependencies:
+      postcss-selector-parser: 6.0.10
+      tailwindcss: 3.4.4
+
   '@types/babel__core@7.20.5':
     dependencies:
       '@babel/parser': 7.22.5
@@ -2074,6 +2094,8 @@ snapshots:
 
   google-protobuf@3.21.2: {}
 
+  google-protobuf@3.21.4: {}
+
   grpc-web@1.5.0: {}
 
   has-flag@3.0.0: {}
@@ -2224,6 +2246,11 @@ snapshots:
       postcss: 8.4.38
       postcss-selector-parser: 6.1.0
 
+  postcss-selector-parser@6.0.10:
+    dependencies:
+      cssesc: 3.0.0
+      util-deprecate: 1.0.2
+
   postcss-selector-parser@6.1.0:
     dependencies:
       cssesc: 3.0.0
@@ -2259,19 +2286,19 @@ snapshots:
 
   rmcs-api-client@file:../../../opt/rmcs-workspace/rmcs-api-client/web:
     dependencies:
-      google-protobuf: 3.21.2
+      google-protobuf: 3.21.4
       grpc-web: 1.5.0
       rmcs-auth-api: file:../../../opt/rmcs-workspace/rmcs-auth-api/web
       rmcs-resource-api: file:../../../opt/rmcs-workspace/rmcs-resource-api/web
 
   rmcs-auth-api@file:../../../opt/rmcs-workspace/rmcs-auth-api/web:
     dependencies:
-      google-protobuf: 3.21.2
+      google-protobuf: 3.21.4
       grpc-web: 1.5.0
 
   rmcs-resource-api@file:../../../opt/rmcs-workspace/rmcs-resource-api/web:
     dependencies:
-      google-protobuf: 3.21.2
+      google-protobuf: 3.21.4
       grpc-web: 1.5.0
 
   rollup-plugin-visualizer@5.12.0(rollup@4.9.5):

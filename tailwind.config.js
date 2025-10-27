@@ -21,7 +21,10 @@ export default {
       },
     },
   },
-  plugins: [daisyui],
+  plugins: [
+    require('@tailwindcss/typography'),
+    daisyui
+  ],
   daisyui: {
     themes: ["winter", "night"],
     darkMode: ['class', '[data-theme="night"]']
