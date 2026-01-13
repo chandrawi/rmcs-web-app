@@ -1,6 +1,6 @@
 import { Show, For, createSignal, createResource, createEffect } from "solid-js";
 import { useSearchParams } from "@solidjs/router";
-import { read_model, list_data_by_last_time, list_data_by_range_time } from "rmcs-api-client";
+import { read_model, list_data_by_later, list_data_by_range } from "bbthings_grpc";
 import { resourceServer, dateToString } from "../../store";
 import DataTable from "../table/DataTable";
 import TimeChart from "../chart/TimeChart";
@@ -33,7 +33,7 @@ export default function SensorData(props) {
   const [data, {refetch} ] = createResource(props.sensor, async (input) => {
     if (timeMode() == "live") {
       const tLast = new Date(Date.now() - timeLast());
-      return await list_data_by_range_time(resourceServer.get(props.apiId), {
+      return await list_data_by_range(resourceServer.get(props.apiId), {
         device_id: input.device_id,
         model_id: input.model_id,
         begin: tLast,
@@ -41,7 +41,7 @@ export default function SensorData(props) {
       });
     }
     else if (timeMode() == "history") {
-      return await list_data_by_range_time(resourceServer.get(props.apiId), {
+      return await list_data_by_range(resourceServer.get(props.apiId), {
         device_id: input.device_id,
         model_id: input.model_id,
         begin: timeBegin(),

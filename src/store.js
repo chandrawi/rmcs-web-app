@@ -89,8 +89,8 @@ export const authServer = {
     const address = readCookie("auth_address");
     const token = readCookie("auth_token");
     if (address) this.address = address;
-    if (token) this.token = token;
-    return { address: this.address, token: this.token };
+    if (token) this.auth_token = token;
+    return { address: this.address, auth_token: this.auth_token };
   },
 
   /** @param {string} address */
@@ -101,7 +101,7 @@ export const authServer = {
 
   /** @param {string} token */
   setToken(token) {
-    this.token = token;
+    this.auth_token = token;
     createCookie("auth_token", token, EXPIRE);
   },
 
@@ -112,7 +112,7 @@ export const authServer = {
 
 export const resourceServer = {
   resources: {},
-  empty: { address: null, token: null, refresh_token: null },
+  empty: { address: null, access_token: null, refresh_token: null },
 
   /** @param {string} id @returns {{ address:?string, token:?string, refresh_token:?string }} */
   get(id) {
@@ -123,7 +123,7 @@ export const resourceServer = {
         if (cookievalue) this.resources[id].address = cookievalue;
       }
       if (name.indexOf("resource_token_" + id) == 0) {
-        if (cookievalue) this.resources[id].token = cookievalue;
+        if (cookievalue) this.resources[id].access_token = cookievalue;
       }
       if (name.indexOf("resource_refresh_" + id) == 0) {
         if (cookievalue) this.resources[id].refresh_token = cookievalue;
@@ -142,7 +142,7 @@ export const resourceServer = {
   /** @param {string} id @param {string} token */
   setToken(id, token) {
     if (!(id in this.resources)) this.resources[id] = this.empty;
-    this.resources[id].token = token;
+    this.resources[id].access_token = token;
     createCookie("resource_token_" + id, token, EXPIRE);
   },
 

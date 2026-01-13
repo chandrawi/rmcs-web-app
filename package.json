@@ -23,11 +23,9 @@
   },
   "dependencies": {
     "@solidjs/router": "^0.13.5",
-    "google-protobuf": "^3.21.2",
-    "grpc-web": "^1.5.0",
-    "rmcs-api-client": "file:/opt/rmcs-workspace/rmcs-api-client/web",
-    "rmcs-auth-api": "file:/opt/rmcs-workspace/rmcs-auth-api/web",
-    "rmcs-resource-api": "file:/opt/rmcs-workspace/rmcs-resource-api/web",
+    "google-protobuf": "^3.21.4",
+    "grpc-web": "^2.0.2",
+    "bbthings_grpc": "file:/opt/backbone_things_api/grpc_api/client_web",
     "solid-js": "^1.8.11"
   }
 }

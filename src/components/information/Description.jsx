@@ -10,7 +10,7 @@ export default function Description() {
                 <span class="align-middle text-sm">Sistem Pemantauan Longsor PGE Hululais</span>
               </div>
             </div>
-            <div class="flex flex-row justify-center p-3 bg-white dark:bg-gray-900">
+            <div class="flex flex-row justify-center py-3 px-6 bg-white dark:bg-gray-900">
               <article class="prose text-gray-900 py-4 max-w-[80ch]">              
                 <h3>Objek Pemantauan</h3>
                 <p class="text-base/6 my-2">
@@ -21,7 +21,7 @@ export default function Description() {
                 </p>
                 <h3>Aplikasi</h3>
                 <p class="text-base/6 my-2">
-                  Pemantauan longsor di sumur uap PGE Hululais dilakukan dengan cara mengebor tanah lalu memasang susunan sensor inclinometer digital. Sensor tersebut akan mengukur kemiringan secara terus menerus. Selain sensor inklinometer, dipasang juga sensor-sensor kondisi lingkungan antara lain sensor curah hujan, sensor piezometer untuk mengukur permukaan air tanah, serta sensor temperatur dan kelembaban udara.
+                  Pemantauan longsor di sumur uap PGE Hululais dilakukan dengan cara mengebor tanah lalu memasang susunan sensor inklinometer digital. Sensor tersebut akan mengukur kemiringan secara terus menerus. Selain sensor inklinometer, dipasang juga sensor-sensor kondisi lingkungan antara lain sensor curah hujan, sensor piezometer untuk mengukur permukaan air tanah, serta sensor temperatur dan kelembaban udara.
                 </p>
                 <p class="text-base/6 my-2">
                   Sensor inklinometer yang digunakan adalah inklinometer tiga sumbu. Sumbu X sensor ditempatkan sejajar dengan vektor gravitasi, sumbu Y searah timur, dan sumbu Z searah utara. Penempatan sensor diilustrasikan pada gambar berikut.

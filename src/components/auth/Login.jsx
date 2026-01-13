@@ -1,6 +1,6 @@
 import { createSignal } from "solid-js";
 import { useNavigate } from "@solidjs/router";
-import { user_login } from "rmcs-api-client";
+import { user_login } from "bbthings_grpc";
 import { authServer, resourceServer, setUserId } from "../../store";
 
 export default function Login() {

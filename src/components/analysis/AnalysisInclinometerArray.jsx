@@ -1,6 +1,6 @@
 import { Show, For, createSignal, createResource, createEffect } from "solid-js";
 import { useSearchParams } from "@solidjs/router";
-import { read_set, read_model, read_device, list_data_set_by_last_time, list_data_set_by_range_time, read_data_set } from "rmcs-api-client";
+import { read_set, read_model, read_device, list_data_set_by_later, list_data_set_by_range, read_data_set } from "bbthings_grpc";
 import { resourceServer, dateToString } from "../../store";
 import DataTable from "../table/DataTable";
 import LineChart from "../chart/LineChart";
@@ -72,14 +72,14 @@ export default function AnalysisInclinometerArray(props) {
   const [dataset, {refetch}] = createResource(props.analysis, async (input) => {
     if (timeMode() == "live") {
       const tLast = new Date(Date.now() - timeLast());
-      return await list_data_set_by_range_time(resourceServer.get(props.apiId), {
+      return await list_data_set_by_range(resourceServer.get(props.apiId), {
         set_id: input.set_id,
         begin: tLast,
         end: new Date(Date.now())
       });
     }
     else if (timeMode() == "history" && dataMode() != "specific") {
-      return await list_data_set_by_range_time(resourceServer.get(props.apiId), {
+      return await list_data_set_by_range(resourceServer.get(props.apiId), {
         set_id: input.set_id,
         begin: timeBegin(),
         end: timeEnd()

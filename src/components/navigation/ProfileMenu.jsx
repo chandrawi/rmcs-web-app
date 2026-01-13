@@ -1,5 +1,5 @@
 import { Show, createResource } from "solid-js";
-import { read_user } from "rmcs-api-client";
+import { read_user } from "bbthings_grpc";
 import { userId, authServer } from "../../store";
 
 export default function ProfileMenu() {

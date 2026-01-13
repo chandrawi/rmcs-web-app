@@ -1,10 +1,10 @@
 {
   "auth": {
-    "address": "https://api-pge.gundala.co.id:8001"
+    "address": "https://api-pge.gundala.co.id:8003"
   },
   "resource": [
     {
-      "address": "https://api-pge.gundala.co.id:8002",
+      "address": "https://api-pge.gundala.co.id:8004",
       "id": "e984a5c7-5c91-451e-bc95-645938e6ba73"
     }
   ]

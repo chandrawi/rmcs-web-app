@@ -26,9 +26,7 @@ export default defineConfig({
         manualChunks: {
           protobuf: ["google-protobuf"],
           grpc_web: ["grpc-web"],
-          rmcs_auth: ["rmcs-auth-api"],
-          rmcs_resource: ["rmcs-resource-api"],
-          rmcs_api: ["rmcs-api-client"]
+          bbthings_grpc: ["bbthings_grpc"]
         }
       }
     }

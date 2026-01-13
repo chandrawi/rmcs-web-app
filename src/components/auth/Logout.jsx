@@ -1,5 +1,5 @@
 import { useNavigate } from "@solidjs/router";
-import { user_logout } from "rmcs-api-client";
+import { user_logout } from "bbthings_grpc";
 import { authServer, resourceServer, userId, setUserId } from "../../store";
 
 export default function Logout() {
