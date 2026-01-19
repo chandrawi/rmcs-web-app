@@ -2,8 +2,8 @@
   "inclinometer": {
     "text": "Inclinometer",
     "icon": "icon-list_square",
-    "model_id": "054c454e-7cda-496a-8778-82e85b5f912e",
-    "model_index": [0, 1, 4],
+    "model_id": "2db2a971-c286-4c08-a1b4-bc3697f22b87",
+    "model_index": [0, 1, 6],
     "device_id": {
       "Inclinometer_1": "1f81d099-4c6f-4929-8757-005f557de318",
       "Inclinometer_2": "2b682489-4a02-4bb0-80c5-458f4a20d519",
@@ -26,8 +26,8 @@
   "displacement": {
     "text": "Displacement",
     "icon": "icon-list_square",
-    "model_id": "054c454e-7cda-496a-8778-82e85b5f912e",
-    "model_index": [2, 3],
+    "model_id": "2db2a971-c286-4c08-a1b4-bc3697f22b87",
+    "model_index": [2, 3, 4, 5],
     "device_id": {
       "Displacement_1": "1f81d099-4c6f-4929-8757-005f557de318",
       "Displacement_2": "2b682489-4a02-4bb0-80c5-458f4a20d519",

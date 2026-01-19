@@ -9,11 +9,18 @@
       "live_ranges": [300000, 900000, 1800000, 3600000, 14400000, 43200000, 86400000],
       "live_range": 3600000,
       "view_mode": "graph",
-      "float_precission": {"inclination-Y":5, "inclination-Z":5, "displacement-Y":3, "displacement-Z":3},
-      "chart_value_range": [[1],[1],[50],[50]],
-      "chart_domain_range": [[1000],[1000],[1000],[1000]],
+      "float_precission": {"inclination-Y":5, "inclination-Z":5, "displacement-Y":3, "displacement-Z":3, "displacement":3, "direction": 3},
+      "chart_value_range": [[1],[1],[50],[50],[50],[90]],
+      "chart_domain_range": [[1000],[1000],[1000],[1000],[1000],[1000]],
       "chart_domain": "y",
-      "max_lost": 900000
+      "max_lost": 900000,
+      "subset": {
+        "angle": [0, 1],
+        "displacement_component": [2, 3],
+        "displacement_direction": [4, 5],
+        "angle_displacement": [0, 1, 2, 3],
+        "all": [0, 1, 2, 3, 4, 5]
+      }
     }
   }
 }

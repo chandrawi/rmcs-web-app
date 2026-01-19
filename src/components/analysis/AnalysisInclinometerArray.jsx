@@ -1,6 +1,6 @@
 import { Show, For, createSignal, createResource, createEffect } from "solid-js";
 import { useSearchParams } from "@solidjs/router";
-import { read_set, read_model, read_device, list_data_set_by_later, list_data_set_by_range, read_data_set } from "bbthings_grpc";
+import { read_set, list_model_by_ids, list_device_by_ids, list_data_set_by_later, list_data_set_by_range, read_data_set } from "bbthings_grpc";
 import { resourceServer, dateToString } from "../../store";
 import DataTable from "../table/DataTable";
 import LineChart from "../chart/LineChart";
@@ -15,15 +15,17 @@ export default function AnalysisInclinometerArray(props) {
   const [searchParams, setSearchParams] = useSearchParams();
   const initViewMode = searchParams.view ? searchParams.view : config("view_mode") ? config("view_mode") : "table";
   const initTimeMode = searchParams.time ? searchParams.time : "live";
-  const initDataMode = searchParams.data ? searchParams.data : "old_new";
-  const initTimeLast= searchParams.last ? parseInt(searchParams.last) : config("live_range") ? config("live_range") : 300000;
+  const initFilterMode = searchParams.filter ? searchParams.filter : "old_new";
+  const initDatasetMode = searchParams.dataset ? searchParams.dataset : "angle_displacement";
+  const initTimeLast= searchParams.later ? parseInt(searchParams.later) : config("live_range") ? config("live_range") : 300000;
   const initTimeBegin = searchParams.begin && new Date(searchParams.begin) < new Date() ? new Date(searchParams.begin) : new Date();
   const initTimeEnd = searchParams.end && new Date(searchParams.end) < new Date() ? new Date(searchParams.end) : new Date();
   const initTimeSpecific = searchParams.specific && new Date(searchParams.specific) < new Date() ? new Date(searchParams.specific) : new Date();
 
   let [viewMode, setViewMode] = createSignal(initViewMode);
   let [timeMode, setTimeMode] = createSignal(initTimeMode);
-  let [dataMode, setDataMode] = createSignal(initDataMode);
+  let [filterMode, setFilterMode] = createSignal(initFilterMode);
+  let [datasetMode, setDatasetMode] = createSignal(initDatasetMode);
 
   let [timeLast, setTimeLast] = createSignal(initTimeLast);
   let [timeBegin, setTimeBegin] = createSignal(initTimeBegin);
@@ -34,19 +36,27 @@ export default function AnalysisInclinometerArray(props) {
     return await read_set(resourceServer.get(props.apiId), { id: input.set_id })
   });
   const [model_config] = createResource(set, async (input) => {
+    const model_ids = input.members.map(member => member.model_id);
+    const models = await list_model_by_ids(resourceServer.get(props.apiId), { ids: model_ids });
     let configs = [];
     for (const member of input.members) {
-      const model = await read_model(resourceServer.get(props.apiId), { id: member.model_id });
-      const model_conf = model.configs.filter((_, index) => member.data_index.includes(index));
-      configs = configs.concat(model_conf);
+      const model = models.find(model => model.id == member.model_id);
+      if (model) {
+        const model_conf = model.configs.filter((_, index) => member.data_index.includes(index));
+        configs = configs.concat(model_conf);
+      }
     }
     return configs;
   });
   const [device_config] = createResource(set, async (input) => {
+    const device_ids = input.members.map(member => member.device_id);
+    const devices = await list_device_by_ids(resourceServer.get(props.apiId), { ids: device_ids });
     let configs = [];
     for (const member of input.members) {
-      const device = await read_device(resourceServer.get(props.apiId), { id: member.device_id });
-      configs = configs.concat(device.configs);
+      const device = devices.find(device => device.id == member.device_id);
+      if (device) {
+        configs = configs.concat(device.configs);
+      }
     }
     return configs;
   });
@@ -78,14 +88,14 @@ export default function AnalysisInclinometerArray(props) {
         end: new Date(Date.now())
       });
     }
-    else if (timeMode() == "history" && dataMode() != "specific") {
+    else if (timeMode() == "history" && filterMode() != "specific") {
       return await list_data_set_by_range(resourceServer.get(props.apiId), {
         set_id: input.set_id,
         begin: timeBegin(),
         end: timeEnd()
       });
     }
-    else if (timeMode() == "history" && dataMode() == "specific") {
+    else if (timeMode() == "history" && filterMode() == "specific") {
       return await read_data_set(resourceServer.get(props.apiId), {
         set_id: input.set_id,
         timestamp: timeSpecific()
@@ -104,10 +114,10 @@ export default function AnalysisInclinometerArray(props) {
     let map = [];
 
     if (datasets && positions) {
-      if (dataMode() == "old_new") {
+      if (filterMode() == "old_new") {
         datasets = datasets.filter((_, index) => index == 0 || index + 1 == datasets.length);
       }
-      else if (dataMode() == "average") {
+      else if (filterMode() == "average") {
         let dataSum = [];
         let number = 0;
         for (const dataset of datasets) {
@@ -128,8 +138,8 @@ export default function AnalysisInclinometerArray(props) {
         let index = 0;
         for (const member of sets.members) {
           if (dataset.data.length >= (index + member.data_index.length)) {
-            let group = dataMode();
-            if (dataMode() == "old_new") {
+            let group = filterMode();
+            if (filterMode() == "old_new") {
               group = "newest";
               if (dataset.timestamp == datasets[0].timestamp) group = "oldest";
             }
@@ -150,11 +160,15 @@ export default function AnalysisInclinometerArray(props) {
   function columns() {
     if (model_config()) {
       const configs = model_config();
+      const subset = config("subset")[datasetMode()];
       const cols = {
         ts: { content: "Timestamp", sortable: true, align: "left" },
         position: { content: "Position [mm]", sortable: true }
       };
       for (const i in configs) {
+        if (Array.isArray(subset)) {
+          if (!subset.includes(parseInt(i))) continue;
+        }
         const scale = configs[i].filter((conf) => conf.name == "scale").reduce((_, conf) => conf).value;
         const symbol = configs[i].filter((conf) => conf.name == "symbol").reduce((_, conf) => conf).value;
         cols[scale] = {
@@ -171,12 +185,16 @@ export default function AnalysisInclinometerArray(props) {
     if (datasetMap() && model_config()) {
       const configs = model_config();
       const dataTable = [];
+      const subset = config("subset")[datasetMode()];
       for (const dataset of datasetMap()) {
         const dataRow = {
           ts: dataset.timestamp ? dateToString(dataset.timestamp) : null,
           position: dataset.position
         };
         for (const i in dataset.data) {
+          if (Array.isArray(subset)) {
+            if (!subset.includes(parseInt(i))) continue;
+          }
           const scale = configs[i].filter((conf) => conf.name == "scale").reduce((_, conf) => conf).value;
           let value = dataset.data[i];
           dataRow[scale] = value;
@@ -191,8 +209,12 @@ export default function AnalysisInclinometerArray(props) {
     if (datasetMap() && model_config()) {
       const configs = model_config();
       const dataCharts = {};
+      const subset = config("subset")[datasetMode()];
       for (const dataset of datasetMap()) {
         for (const i in dataset.data) {
+          if (Array.isArray(subset)) {
+            if (!subset.includes(parseInt(i))) continue;
+          }
           const dataRow = {
             "Data set": dataset.group,
             Position: dataset.position
@@ -211,9 +233,13 @@ export default function AnalysisInclinometerArray(props) {
   function itemCharts() {
     if (model_config() && dataCharts()) {
       const configs = model_config();
+      const subset = config("subset")[datasetMode()];
       const items = [];
       const scales = [];
       for (const i in configs) {
+        if (Array.isArray(subset)) {
+          if (!subset.includes(parseInt(i))) continue;
+        }
         const scale = configs[i].filter((conf) => conf.name == "scale").reduce((_, conf) => conf).value;
         const symbol = configs[i].filter((conf) => conf.name == "symbol").reduce((_, conf) => conf).value;
         if (!scales.includes(scale)) {
@@ -232,7 +258,8 @@ export default function AnalysisInclinometerArray(props) {
   }
 
   let selectTimeMode;
-  let selectDataMode;
+  let selectFilterMode;
+  let selectDatasetMode;
   let selectRange;
   let datetimeBegin;
   let datetimeEnd;
@@ -243,8 +270,9 @@ export default function AnalysisInclinometerArray(props) {
     if (selectTimeMode.value == "live") {
       setSearchParams({
         time: "live",
-        data: selectDataMode.value,
-        last: selectRange.value,
+        filter: selectFilterMode.value,
+        dataset: selectDatasetMode.value,
+        later: selectRange.value,
         begin: null,
         end: null,
         specific: null
@@ -255,11 +283,12 @@ export default function AnalysisInclinometerArray(props) {
     else if (selectTimeMode.value == "history") {
       setSearchParams({
         time: "history",
-        data: selectDataMode.value,
-        last: null,
-        begin: dataMode() != "specific" ? datetimeBegin.value : null,
-        end: dataMode() != "specific" ? datetimeEnd.value : null,
-        specific: dataMode() == "specific" ? datetimeSpecific.value : null
+        filter: selectFilterMode.value,
+        dataset: selectDatasetMode.value,
+        later: null,
+        begin: filterMode() != "specific" ? datetimeBegin.value : null,
+        end: filterMode() != "specific" ? datetimeEnd.value : null,
+        specific: filterMode() == "specific" ? datetimeSpecific.value : null
       });
       if (datetimeBegin.value && datetimeEnd.value) {
         if (new Date(datetimeBegin.value) < new Date()) setTimeBegin(new Date(datetimeBegin.value));
@@ -281,8 +310,8 @@ export default function AnalysisInclinometerArray(props) {
 
   createEffect(() => {
     if (searchParams.time) selectTimeMode.value = searchParams.time;
-    if (searchParams.data) selectDataMode.value = searchParams.data;
-    if (searchParams.last) selectRange.value = searchParams.last;
+    if (searchParams.data) selectFilterMode.value = searchParams.data;
+    if (searchParams.later) selectRange.value = searchParams.later;
     if (searchParams.begin) datetimeBegin.value = searchParams.begin;
     if (searchParams.end) datetimeEnd.value = searchParams.end;
     if (searchParams.specific) datetimeSpecific.value = searchParams.specific;
@@ -291,7 +320,7 @@ export default function AnalysisInclinometerArray(props) {
   const [rangeList, setRangeList] = createSignal([300000, 900000, 1800000, 3600000]);
   createEffect(() => {
     if (Array.isArray(config("live_ranges"))) setRangeList(config("live_ranges"));
-    if (config("live_range")) selectRange.value = searchParams.last ? searchParams.last : config("live_range");
+    if (config("live_range")) selectRange.value = searchParams.later ? searchParams.later : config("live_range");
   });
   function rangeName(range) {
     if (range < 60000) return String(range / 1000) + " seconds";
@@ -330,7 +359,7 @@ export default function AnalysisInclinometerArray(props) {
         <div class="w-full bg-white dark:bg-gray-900 text-sm">
           <form action="#" class="px-2 py-2 flex flex-row flex-wrap" onsubmit={submitMode}>
             <div class="mx-1 my-1 flex flex-row">
-              <label for="input-mode" class="px-1.5 py-0.5 rounded-l-sm bg-sky-100 dark:bg-sky-950">Mode</label>
+              <label for="time-mode" class="px-1.5 py-0.5 rounded-l-sm bg-sky-100 dark:bg-sky-950">Mode</label>
               <select name="time-mode" class="px-1 bg-white border border-sky-100 dark:bg-slate-800 dark:border-sky-950"
                 ref={selectTimeMode} onChange={() => setTimeMode(selectTimeMode.value)}
               >
@@ -339,9 +368,9 @@ export default function AnalysisInclinometerArray(props) {
               </select>
             </div>
             <div class="mx-1 my-1 flex flex-row">
-              <label for="input-mode" class="px-1.5 py-0.5 rounded-l-sm bg-sky-100 dark:bg-sky-950">Data</label>
-              <select name="data-mode" class="px-1 bg-white border border-sky-100 dark:bg-slate-800 dark:border-sky-950"
-                ref={selectDataMode} onChange={() => setDataMode(selectDataMode.value)}
+              <label for="filter-mode" class="px-1.5 py-0.5 rounded-l-sm bg-sky-100 dark:bg-sky-950">Filter</label>
+              <select name="filter-mode" class="px-1 bg-white border border-sky-100 dark:bg-slate-800 dark:border-sky-950"
+                ref={selectFilterMode} onChange={() => setFilterMode(selectFilterMode.value)}
               >
                 <option value="old_new">Old-New</option>
                 <option value="average">Average</option>
@@ -349,11 +378,23 @@ export default function AnalysisInclinometerArray(props) {
                 <option value="specific" classList={{"hidden": timeMode() != "history"}}>Specific</option>
               </select>
             </div>
+            <div class="mx-1 my-1 flex flex-row">
+              <label for="dataset-mode" class="px-1.5 py-0.5 rounded-l-sm bg-sky-100 dark:bg-sky-950">Dataset</label>
+              <select name="dataset-mode" class="px-1 bg-white border border-sky-100 dark:bg-slate-800 dark:border-sky-950"
+                ref={selectDatasetMode} onChange={() => setDatasetMode(selectDatasetMode.value)}
+              >
+                <option value="angle">Angle</option>
+                <option value="displacement_component">Displacement Component</option>
+                <option value="displacement_direction">Displacement & Direction</option>
+                <option value="angle_displacement">Angle & Displacement</option>
+                <option value="all">All</option>
+              </select>
+            </div>
             <div class="grow"></div>
             <div class="flex flex-row flex-wrap justify-between">
-              <div class="mx-1 my-1 flex flex-row" classList={{"hidden": timeMode() != "live" || dataMode() == "specific"}}>
-                <label for="input-last" class="px-1.5 py-0.5 rounded-l-sm bg-slate-200 dark:bg-slate-700">Range</label>
-                <select name="time-last" class="px-1 bg-white border border-slate-200 dark:bg-slate-800 dark:border-slate-700"
+              <div class="mx-1 my-1 flex flex-row" classList={{"hidden": timeMode() != "live" || filterMode() == "specific"}}>
+                <label for="input-later" class="px-1.5 py-0.5 rounded-l-sm bg-slate-200 dark:bg-slate-700">Range</label>
+                <select name="time-later" class="px-1 bg-white border border-slate-200 dark:bg-slate-800 dark:border-slate-700"
                   ref={selectRange}
                 >
                   <For each={rangeList()}>
@@ -363,19 +404,19 @@ export default function AnalysisInclinometerArray(props) {
                   </For>
                 </select>
               </div>
-              <div class="mx-1 my-1 flex flex-row" classList={{"hidden": timeMode() != "history" || dataMode() == "specific"}}>
+              <div class="mx-1 my-1 flex flex-row" classList={{"hidden": timeMode() != "history" || filterMode() == "specific"}}>
                 <label for="input-begin" class="min-w-[3rem] px-1.5 py-0.5 rounded-l-sm bg-slate-200 dark:bg-slate-700">Begin</label>
                 <input type="datetime-local" step="1" name="time-begin" class="w-[12rem] px-1 bg-white border border-slate-200 dark:bg-slate-800 dark:border-slate-700" 
                   ref={datetimeBegin}
                 />
               </div>
-              <div class="mx-1 my-1 flex flex-row" classList={{"hidden": timeMode() != "history" || dataMode() == "specific"}}>
+              <div class="mx-1 my-1 flex flex-row" classList={{"hidden": timeMode() != "history" || filterMode() == "specific"}}>
                 <label for="input-end" class="min-w-[3rem] px-1.5 py-0.5 rounded-l-sm bg-slate-200 dark:bg-slate-700">End</label>
                 <input type="datetime-local" step="1" name="time-end" class="w-[12rem] px-1 bg-white border border-slate-200 dark:bg-slate-800 dark:border-slate-700" 
                   ref={datetimeEnd}
                 />
               </div>
-              <div class="mx-1 my-1 flex flex-row" classList={{"hidden": dataMode() != "specific"}}>
+              <div class="mx-1 my-1 flex flex-row" classList={{"hidden": filterMode() != "specific"}}>
                 <label for="input-end" class="min-w-[3rem] px-1.5 py-0.5 rounded-l-sm bg-slate-200 dark:bg-slate-700">Datetime</label>
                 <input type="datetime-local" step="1" name="time-end" class="w-[12rem] px-1 bg-white border border-slate-200 dark:bg-slate-800 dark:border-slate-700" 
                   ref={datetimeSpecific}
