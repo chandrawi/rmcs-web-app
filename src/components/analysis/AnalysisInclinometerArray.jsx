@@ -17,7 +17,7 @@ export default function AnalysisInclinometerArray(props) {
   const initTimeMode = searchParams.time ? searchParams.time : "live";
   const initFilterMode = searchParams.filter ? searchParams.filter : "old_new";
   const initDatasetMode = searchParams.dataset ? searchParams.dataset : "angle_displacement";
-  const initTimeLast= searchParams.later ? parseInt(searchParams.later) : config("live_range") ? config("live_range") : 300000;
+  const initTimeLater= searchParams.later ? parseInt(searchParams.later) : config("live_range") ? config("live_range") : 300000;
   const initTimeBegin = searchParams.begin && new Date(searchParams.begin) < new Date() ? new Date(searchParams.begin) : new Date();
   const initTimeEnd = searchParams.end && new Date(searchParams.end) < new Date() ? new Date(searchParams.end) : new Date();
   const initTimeSpecific = searchParams.specific && new Date(searchParams.specific) < new Date() ? new Date(searchParams.specific) : new Date();
@@ -27,7 +27,7 @@ export default function AnalysisInclinometerArray(props) {
   let [filterMode, setFilterMode] = createSignal(initFilterMode);
   let [datasetMode, setDatasetMode] = createSignal(initDatasetMode);
 
-  let [timeLast, setTimeLast] = createSignal(initTimeLast);
+  let [timeLater, setTimeLater] = createSignal(initTimeLater);
   let [timeBegin, setTimeBegin] = createSignal(initTimeBegin);
   let [timeEnd, setTimeEnd] = createSignal(initTimeEnd);
   let [timeSpecific, setTimeSpecific] = createSignal(initTimeSpecific);
@@ -68,7 +68,6 @@ export default function AnalysisInclinometerArray(props) {
     let map = {};
     let position = 0;
     if (configs) {
-      let first_id = configs[0].device_id;
       for (const config of configs) {
         if (config.name == "space") {
           position = position - config.value;
@@ -81,10 +80,10 @@ export default function AnalysisInclinometerArray(props) {
 
   const [dataset, {refetch}] = createResource(props.analysis, async (input) => {
     if (timeMode() == "live") {
-      const tLast = new Date(Date.now() - timeLast());
+      const tLater = new Date(Date.now() - timeLater());
       return await list_data_set_by_range(resourceServer.get(props.apiId), {
         set_id: input.set_id,
-        begin: tLast,
+        begin: tLater,
         end: new Date(Date.now())
       });
     }
@@ -277,7 +276,7 @@ export default function AnalysisInclinometerArray(props) {
         end: null,
         specific: null
       });
-      setTimeLast(parseInt(selectRange.value));
+      setTimeLater(parseInt(selectRange.value));
       refetch();
     }
     else if (selectTimeMode.value == "history") {
@@ -386,7 +385,7 @@ export default function AnalysisInclinometerArray(props) {
                 <option value="angle">Angle</option>
                 <option value="displacement_component">Displacement Component</option>
                 <option value="displacement_direction">Displacement & Direction</option>
-                <option value="angle_displacement">Angle & Displacement</option>
+                <option value="angle_displacement" selected>Angle & Displacement</option>
                 <option value="all">All</option>
               </select>
             </div>

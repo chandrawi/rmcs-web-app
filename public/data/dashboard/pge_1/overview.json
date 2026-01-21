@@ -1,0 +1,21 @@
+{
+  "soil_movement": {
+    "text": "Soil Movement",
+    "icon": "icon-list_square",
+    "set_id": {
+      "Soil Movement 1": "10f796e8-c134-4d56-8919-b83729de7368"
+    },
+    "config": {
+      "live_ranges": [300000, 900000, 1800000, 3600000, 14400000, 43200000, 86400000],
+      "float_precission": {"displacement-Y":3, "displacement-Z":3, "displacement":3, "direction": 3},
+      "chart_value_range": [[1],[1],[50],[50],[50],[90]],
+      "chart_domain_range": [[1000],[1000],[1000],[1000],[1000],[1000]],
+      "chart_domain": "y",
+      "max_lost": 900000,
+      "subset": {
+        "displacement_component": [2, 3],
+        "displacement_direction": [4, 5]
+      }
+    }
+  }
+}
