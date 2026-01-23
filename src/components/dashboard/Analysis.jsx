@@ -3,7 +3,7 @@ import { useParams } from "@solidjs/router";
 import { DEFAULT_DASHBOARD } from "../../store";
 import Breadcrumb from "../navigation/Breadcrumb";
 import ItemList from "./ItemList";
-import AnalysisInclinometerArray from "../analysis/AnalysisInclinometerArray";
+import InclinometerShape from "../analysis/InclinometerShape";
 
 export default function Analysis() {
 
@@ -102,8 +102,8 @@ export default function Analysis() {
     <Switch fallback={
       <ItemList apiId={apiId()} sets={analyses} config={itemListConfig()} />
     }>
-      <Match when={analysis() && analysisType() == "inclinometer_array"}>
-        <AnalysisInclinometerArray apiId={apiId()} analysis={analysis} />
+      <Match when={analysis() && analysisType() == "inclinometer_shape"}>
+        <InclinometerShape apiId={apiId()} analysis={analysis} />
       </Match>
     </Switch>
     </>

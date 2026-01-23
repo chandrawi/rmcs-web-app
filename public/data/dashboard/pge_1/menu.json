@@ -91,9 +91,9 @@
   "link": ""
 }, {
   "id": 13,
-  "parent_id": 11,
-  "name": "inclinometer_array",
-  "text": "Inclinometer Array",
+  "parent_id": 12,
+  "name": "inclinometer_shape",
+  "text": "Inclinometer Shape",
   "icon": "icon-list_square",
   "link": ""
 }]

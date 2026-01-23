@@ -5,7 +5,7 @@ import { resourceServer, dateToString } from "../../store";
 import DataTable from "../table/DataTable";
 import LineChart from "../chart/LineChart";
 
-export default function AnalysisInclinometerArray(props) {
+export default function InclinometerShape(props) {
 
   const config = (key) => {
     const analysis = props.analysis();

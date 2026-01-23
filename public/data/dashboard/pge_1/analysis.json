@@ -1,6 +1,6 @@
 {
-  "inclinometer_array": {
-    "text": "Inclinometer array",
+  "inclinometer_shape": {
+    "text": "Inclinometer shape",
     "icon": "icon-list_square",
     "set_id": {
       "Inclinometer_Array_1": "10f796e8-c134-4d56-8919-b83729de7368"

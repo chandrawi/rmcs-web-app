@@ -58,7 +58,7 @@ export default function TimeChart(props) {
     },
     mark: {
       type: 'line',
-      interpolate: 'natural'
+      interpolate: 'basis'
     },
     encoding: {
       x: {
