@@ -4,6 +4,7 @@ import { DEFAULT_DASHBOARD } from "../../store";
 import Breadcrumb from "../navigation/Breadcrumb";
 import ItemList from "./ItemList";
 import InclinometerShape from "../analysis/InclinometerShape";
+import SoilMovement from "../analysis/SoilMovement";
 
 export default function Analysis() {
 
@@ -104,6 +105,9 @@ export default function Analysis() {
     }>
       <Match when={analysis() && analysisType() == "inclinometer_shape"}>
         <InclinometerShape apiId={apiId()} analysis={analysis} />
+      </Match>
+      <Match when={analysis() && analysisType() == "soil_movement"}>
+        <SoilMovement apiId={apiId()} analysis={analysis} />
       </Match>
     </Switch>
     </>

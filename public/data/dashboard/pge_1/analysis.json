@@ -22,5 +22,26 @@
         "all": [0, 1, 2, 3, 4, 5]
       }
     }
+  },
+  "soil_movement": {
+    "text": "Soil movement",
+    "icon": "icon-list_square",
+    "set_id": {
+      "Inclinometer_Array_1": "10f796e8-c134-4d56-8919-b83729de7368"
+    },
+    "config": {
+      "live_ranges": [300000, 900000, 1800000, 3600000, 14400000, 43200000, 86400000],
+      "live_range": 3600000,
+      "view_mode": "graph",
+      "float_precission": {"inclination-Y":5, "inclination-Z":5, "displacement-Y":3, "displacement-Z":3, "displacement":3, "direction": 3},
+      "chart_value_range": [[1],[1],[1],[1],[1],[90]],
+      "chart_domain_range": [[1000],[1000],[1000],[1000],[1000],[1000]],
+      "chart_domain": "y",
+      "max_lost": 900000,
+      "subset": {
+        "displacement_component": [2, 3],
+        "displacement_direction": [4, 5]
+      }
+    }
   }
 }

@@ -96,4 +96,11 @@
   "text": "Inclinometer Shape",
   "icon": "icon-list_square",
   "link": ""
+}, {
+  "id": 14,
+  "parent_id": 12,
+  "name": "soil_movement",
+  "text": "Soil Movement",
+  "icon": "icon-list_square",
+  "link": ""
 }]

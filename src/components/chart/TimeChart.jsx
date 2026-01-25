@@ -81,6 +81,13 @@ export default function TimeChart(props) {
     }
   };
 
+  if (props.legend) {
+    vlSpec.encoding.color = {
+      field: props.legend,
+      type: "nominal"
+    };
+  }
+
   createEffect(() => {
     vlSpec.data.values = props.data;
     vlSpec.config.axis.gridColor = darkTheme() ? "#1f2937" : "#e5e7eb";
