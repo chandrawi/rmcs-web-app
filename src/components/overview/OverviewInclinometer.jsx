@@ -3,9 +3,10 @@ import { useSearchParams } from "@solidjs/router";
 import { read_set, list_model_by_ids, list_device_by_ids, list_data_set_by_later, list_data_set_by_range, read_data_set } from "bbthings_grpc";
 import { resourceServer, dateToString } from "../../store";
 import DataTable from "../table/DataTable";
+import TimeChart from "../chart/TimeChart";
 import LineChart from "../chart/LineChart";
 
-export default function InclinometerShape(props) {
+export default function OverviewInclinometer(props) {
 
   const config = (key) => {
     const analysis = props.analysis;
@@ -13,15 +14,17 @@ export default function InclinometerShape(props) {
   }
 
   const [searchParams, setSearchParams] = useSearchParams();
+  const initDomainMode = searchParams.domain ? searchParams.domain : "timestamp";
   const initViewMode = searchParams.view ? searchParams.view : config("view_mode") ? config("view_mode") : "table";
   const initTimeMode = searchParams.time ? searchParams.time : "live";
-  const initFilterMode = searchParams.filter ? searchParams.filter : "old_new";
-  const initDatasetMode = searchParams.dataset ? searchParams.dataset : "angle_displacement";
+  const initFilterMode = searchParams.filter ? searchParams.filter : "all";
+  const initDatasetMode = searchParams.dataset ? searchParams.dataset : "displacement_direction";
   const initTimeLater= searchParams.later ? parseInt(searchParams.later) : config("live_range") ? config("live_range") : 300000;
   const initTimeBegin = searchParams.begin && new Date(searchParams.begin) < new Date() ? new Date(searchParams.begin) : new Date();
   const initTimeEnd = searchParams.end && new Date(searchParams.end) < new Date() ? new Date(searchParams.end) : new Date();
   const initTimeSpecific = searchParams.specific && new Date(searchParams.specific) < new Date() ? new Date(searchParams.specific) : new Date();
 
+  let [domainMode, setDomainMode] = createSignal(initDomainMode);
   let [viewMode, setViewMode] = createSignal(initViewMode);
   let [timeMode, setTimeMode] = createSignal(initTimeMode);
   let [filterMode, setFilterMode] = createSignal(initFilterMode);
@@ -116,7 +119,7 @@ export default function InclinometerShape(props) {
       if (filterMode() == "old_new") {
         datasets = datasets.filter((_, index) => index == 0 || index + 1 == datasets.length);
       }
-      else if (filterMode() == "average") {
+      else if (filterMode() == "average" && domainMode() == "position") {
         let dataSum = [];
         let number = 0;
         for (const dataset of datasets) {
@@ -216,6 +219,7 @@ export default function InclinometerShape(props) {
           }
           const dataRow = {
             "Data set": dataset.group,
+            ts: dataset.timestamp ? dateToString(dataset.timestamp) : null,
             Position: dataset.position
           };
           const scale = configs[i].filter((conf) => conf.name == "scale").reduce((_, conf) => conf).value;
@@ -256,6 +260,7 @@ export default function InclinometerShape(props) {
     return [];
   }
 
+  let selectDomainMode;
   let selectTimeMode;
   let selectFilterMode;
   let selectDatasetMode;
@@ -269,6 +274,7 @@ export default function InclinometerShape(props) {
     if (selectTimeMode.value == "live") {
       setSearchParams({
         time: "live",
+        domain: selectDomainMode.value,
         filter: selectFilterMode.value,
         dataset: selectDatasetMode.value,
         later: selectRange.value,
@@ -282,6 +288,7 @@ export default function InclinometerShape(props) {
     else if (selectTimeMode.value == "history") {
       setSearchParams({
         time: "history",
+        domain: selectDomainMode.value,
         filter: selectFilterMode.value,
         dataset: selectDatasetMode.value,
         later: null,
@@ -309,6 +316,7 @@ export default function InclinometerShape(props) {
 
   createEffect(() => {
     if (searchParams.time) selectTimeMode.value = searchParams.time;
+    if (searchParams.domain) selectDomainMode.value = searchParams.domain;
     if (searchParams.data) selectFilterMode.value = searchParams.data;
     if (searchParams.later) selectRange.value = searchParams.later;
     if (searchParams.begin) datetimeBegin.value = searchParams.begin;
@@ -358,6 +366,15 @@ export default function InclinometerShape(props) {
         <div class="w-full bg-white dark:bg-gray-900 text-sm">
           <form action="#" class="px-2 py-2 flex flex-row flex-wrap" onsubmit={submitMode}>
             <div class="mx-1 my-1 flex flex-row">
+              <label for="domain-mode" class="px-1.5 py-0.5 rounded-l-sm bg-sky-100 dark:bg-sky-950">Domain</label>
+              <select name="domain-mode" class="px-1 bg-white border border-sky-100 dark:bg-slate-800 dark:border-sky-950"
+                ref={selectDomainMode} onChange={() => setDomainMode(selectDomainMode.value)}
+              >
+                <option value="timestamp">Timestamp</option>
+                <option value="position">Position</option>
+              </select>
+            </div>
+            <div class="mx-1 my-1 flex flex-row">
               <label for="time-mode" class="px-1.5 py-0.5 rounded-l-sm bg-sky-100 dark:bg-sky-950">Mode</label>
               <select name="time-mode" class="px-1 bg-white border border-sky-100 dark:bg-slate-800 dark:border-sky-950"
                 ref={selectTimeMode} onChange={() => setTimeMode(selectTimeMode.value)}
@@ -373,7 +390,7 @@ export default function InclinometerShape(props) {
               >
                 <option value="old_new">Old-New</option>
                 <option value="average">Average</option>
-                <option value="all">All</option>
+                <option value="all" selected>All</option>
                 <option value="specific" classList={{"hidden": timeMode() != "history"}}>Specific</option>
               </select>
             </div>
@@ -382,11 +399,8 @@ export default function InclinometerShape(props) {
               <select name="dataset-mode" class="px-1 bg-white border border-sky-100 dark:bg-slate-800 dark:border-sky-950"
                 ref={selectDatasetMode} onChange={() => setDatasetMode(selectDatasetMode.value)}
               >
-                <option value="angle">Angle</option>
                 <option value="displacement_component">Displacement Component</option>
-                <option value="displacement_direction">Displacement & Direction</option>
-                <option value="angle_displacement" selected>Angle & Displacement</option>
-                <option value="all">All</option>
+                <option value="displacement_direction" selected>Displacement & Direction</option>
               </select>
             </div>
             <div class="grow"></div>
@@ -444,10 +458,14 @@ export default function InclinometerShape(props) {
                 </div>
               </div>
               <div class="p-3 bg-white dark:bg-gray-900">
-                <Show when={config("chart_domain") == "y"} fallback={
-                  <LineChart data={dataCharts()[item.scale]} domain="Position" xColumn="Position" yColumn={item.scale} yRange={item.range} xRange={item.range_domain} />
+                <Show when={domainMode() == "position"} fallback={
+                  <TimeChart data={dataCharts()[item.scale]} timestampColumn="ts" valueColumn={item.scale} valueRange={item.range} legend="Position" />
                 }>
-                  <LineChart data={dataCharts()[item.scale]} domain="Position" yColumn="Position" xColumn={item.scale} xRange={item.range} yRange={item.range_domain} />
+                  <Show when={config("chart_domain") == "y"} fallback={
+                    <LineChart data={dataCharts()[item.scale]} domain="Position" xColumn="Position" yColumn={item.scale} yRange={item.range} xRange={item.range_domain} />
+                  }>
+                    <LineChart data={dataCharts()[item.scale]} domain="Position" yColumn="Position" xColumn={item.scale} xRange={item.range} yRange={item.range_domain} />
+                  </Show>
                 </Show>
               </div>
             </div>

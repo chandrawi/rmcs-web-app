@@ -104,10 +104,10 @@ export default function Analysis() {
       <ItemList apiId={apiId()} sets={analyses} config={itemListConfig()} />
     }>
       <Match when={analysis() && analysisType() == "inclinometer_shape"}>
-        <InclinometerShape apiId={apiId()} analysis={analysis} />
+        <InclinometerShape apiId={apiId()} analysis={analysis()} />
       </Match>
       <Match when={analysis() && analysisType() == "soil_movement"}>
-        <SoilMovement apiId={apiId()} analysis={analysis} />
+        <SoilMovement apiId={apiId()} analysis={analysis()} />
       </Match>
     </Switch>
     </>

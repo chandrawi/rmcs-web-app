@@ -8,7 +8,7 @@ import TimeChart from "../chart/TimeChart";
 export default function SoilMovement(props) {
 
   const config = (key) => {
-    const analysis = props.analysis();
+    const analysis = props.analysis;
     if (analysis) if (analysis.config) return analysis.config[key];
   }
 
@@ -178,7 +178,7 @@ export default function SoilMovement(props) {
             if (!subset.includes(parseInt(i))) continue;
           }
           const dataRow = {
-            ts: dateToString(dataset.timestamp),
+            ts: dataset.timestamp ? dateToString(dataset.timestamp) : null,
             Position: dataset.position
           };
           const scale = configs[i].filter((conf) => conf.name == "scale").reduce((_, conf) => conf).value;
@@ -266,9 +266,6 @@ export default function SoilMovement(props) {
     if (searchParams.later) selectRange.value = searchParams.later;
     if (searchParams.begin) datetimeBegin.value = searchParams.begin;
     if (searchParams.end) datetimeEnd.value = searchParams.end;
-
-    console.log(datasetMap());
-    console.log(dataCharts());
   });
 
   const [rangeList, setRangeList] = createSignal([300000, 900000, 1800000, 3600000]);
@@ -292,8 +289,8 @@ export default function SoilMovement(props) {
       <div class="w-full max-w-[48rem] xs:rounded-sm border border-slate-200 dark:border-slate-700">
         <div class="w-full flex flex-row items-center justify-between bg-gray-100 dark:bg-gray-800">
           <div class="mx-2 my-1.5 flex flex-row items-center font-semibold">
-            <span class={(props.analysis().icon ? props.analysis().icon : "icon-list_square") + " text-[1.5rem] align-middle"}></span>
-            <span class="ml-1 align-middle">{props.analysis().name}&nbsp;</span>
+            <span class={(props.analysis.icon ? props.analysis.icon : "icon-list_square") + " text-[1.5rem] align-middle"}></span>
+            <span class="ml-1 align-middle">{props.analysis.name}&nbsp;</span>
           </div>
           <div class="mx-3 my-auto flex flex-row text-sm">
             <button class={"px-2 py-0.5 text-gray-100 rounded-l-sm " 
@@ -374,7 +371,7 @@ export default function SoilMovement(props) {
             <div class="xs:rounded-sm border border-slate-200 dark:border-slate-700">
               <div class="flex flex-row items-center bg-gray-100 dark:bg-gray-800">
                 <div class="mx-3 my-1.5 flex flex-row items-center font-medium">
-                  <span class="align-middle text-sm">{props.analysis().name}&nbsp;</span>
+                  <span class="align-middle text-sm">{props.analysis.name}&nbsp;</span>
                   <span class="icon-chevron_right align-middle text-[0.875rem]"></span>
                   <span class="align-middle text-sm">&nbsp;{item.content}</span>
                 </div>
@@ -394,7 +391,7 @@ export default function SoilMovement(props) {
         <div class="w-full max-w-[48rem] xs:rounded-sm border border-slate-200 dark:border-slate-700">
           <div class="flex flex-row items-center bg-gray-100 dark:bg-gray-800">
             <div class="mx-3 my-1.5 flex flex-row items-center font-medium">
-              <span class="align-middle text-sm leading-6">{props.analysis().name}&nbsp;</span>
+              <span class="align-middle text-sm leading-6">{props.analysis.name}&nbsp;</span>
             </div>
           </div>
           <div class="w-full xs:px-4 py-2 bg-white dark:bg-gray-900 text-sm overflow-x-auto scrollbar-custom scrollbar-gutter-auto">
