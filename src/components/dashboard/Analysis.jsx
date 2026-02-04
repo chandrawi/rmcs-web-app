@@ -5,6 +5,7 @@ import Breadcrumb from "../navigation/Breadcrumb";
 import ItemList from "./ItemList";
 import InclinometerShape from "../analysis/InclinometerShape";
 import SoilMovement from "../analysis/SoilMovement";
+import DisplacementChange from "../analysis/DisplacementChange";
 
 export default function Analysis() {
 
@@ -108,6 +109,9 @@ export default function Analysis() {
       </Match>
       <Match when={analysis() && analysisType() == "soil_movement"}>
         <SoilMovement apiId={apiId()} analysis={analysis()} />
+      </Match>
+      <Match when={analysis() && analysisType() == "displacement_change"}>
+        <DisplacementChange apiId={apiId()} analysis={analysis()} />
       </Match>
     </Switch>
     </>

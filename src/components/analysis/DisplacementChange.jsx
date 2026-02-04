@@ -3,9 +3,9 @@ import { useSearchParams } from "@solidjs/router";
 import { read_set, list_model_by_ids, list_device_by_ids, list_data_set_by_later, list_data_set_by_range, read_data_set } from "bbthings_grpc";
 import { resourceServer, dateToString } from "../../store";
 import DataTable from "../table/DataTable";
-import TimeChart from "../chart/TimeChart";
+import BarChart from "../chart/BarChart";
 
-export default function SoilMovement(props) {
+export default function DisplacementChange(props) {
 
   const config = (key) => {
     const analysis = props.analysis;
@@ -16,6 +16,7 @@ export default function SoilMovement(props) {
   const initViewMode = searchParams.view ? searchParams.view : config("view_mode") ? config("view_mode") : "table";
   const initTimeMode = searchParams.time ? searchParams.time : "live";
   const initDatasetMode = searchParams.dataset ? searchParams.dataset : "displacement_direction";
+  const initFrameMode = searchParams.frame ? searchParams.frame : "hourly";
   const initTimeLater= searchParams.later ? parseInt(searchParams.later) : config("live_range") ? config("live_range") : 300000;
   const initTimeBegin = searchParams.begin && new Date(searchParams.begin) < new Date() ? new Date(searchParams.begin) : new Date();
   const initTimeEnd = searchParams.end && new Date(searchParams.end) < new Date() ? new Date(searchParams.end) : new Date();
@@ -23,6 +24,7 @@ export default function SoilMovement(props) {
   let [viewMode, setViewMode] = createSignal(initViewMode);
   let [timeMode, setTimeMode] = createSignal(initTimeMode);
   let [datasetMode, setDatasetMode] = createSignal(initDatasetMode);
+  let [frameMode, setFrameMode] = createSignal(initFrameMode);
 
   let [timeLater, setTimeLater] = createSignal(initTimeLater);
   let [timeBegin, setTimeBegin] = createSignal(initTimeBegin);
@@ -75,45 +77,61 @@ export default function SoilMovement(props) {
   };
 
   const [dataset, {refetch}] = createResource(props.analysis, async (input) => {
+    const frame = config("time_frame")[frameMode()];
+    const tag = config("time_frame_tag")[frameMode()];
     if (timeMode() == "live") {
-      const tLater = new Date(Date.now() - timeLater());
+      const tNow = Date.now();
+      const tEnd = tNow - (tNow % frame);
+      const tBegin = tEnd - parseInt(timeLater());
       return await list_data_set_by_range(resourceServer.get(props.apiId), {
         set_id: input.set_id,
-        begin: tLater,
-        end: new Date(Date.now())
+        begin: new Date(tBegin),
+        end: new Date(tEnd),
+        tag: tag
       });
     }
     else if (timeMode() == "history") {
       return await list_data_set_by_range(resourceServer.get(props.apiId), {
         set_id: input.set_id,
         begin: timeBegin(),
-        end: timeEnd()
+        end: timeEnd(),
+        tag: tag
       });
     }
   });
 
   /**
-   * @returns {{ timestamp: Date|undefined, position: number, data: number[], group: string }[]}
+   * @returns {{ timestamp: Date|undefined, position: number, data: number[], delta: number[], group: string }[]}
    */
   const datasetMap = () => {
     let datasets = dataset();
     const sets = set();
     const positions = positionMap();
+    let first_flag = true;
+    let last_data = [];
     let map = [];
 
     if (datasets && positions) {
       for (const dataset of datasets) {
         let index = 0;
-        for (const member of sets.members) {
+        for (const [i, member] of sets.members.entries()) {
           if (dataset.data.length >= (index + member.data_index.length)) {
+            const data = dataset.data.slice(index, index + member.data_index.length);
+            let delta = new Array(member.data_index.length).fill(0);
+            if (!first_flag) {
+              delta = data.map((datum, j) => datum - last_data[i][j]);
+            }
+            last_data[i] = data;
             map.push({
               timestamp: dataset.timestamp,
               position: positions[member.device_id],
-              data: dataset.data.slice(index, index + member.data_index.length)
+              data: data,
+              delta: delta
             });
           }
           index += member.data_index.length;
         }
+        first_flag = false;
       }
     }
     return map;
@@ -158,7 +176,7 @@ export default function SoilMovement(props) {
             if (!subset.includes(parseInt(i))) continue;
           }
           const scale = configs[i].filter((conf) => conf.name == "scale").reduce((_, conf) => conf).value;
-          let value = dataset.data[i];
+          let value = dataset.delta[i];
           dataRow[scale] = value;
         }
         dataTable.push(dataRow);
@@ -182,7 +200,7 @@ export default function SoilMovement(props) {
             Position: dataset.position
           };
           const scale = configs[i].filter((conf) => conf.name == "scale").reduce((_, conf) => conf).value;
-          let value = dataset.data[i];
+          let value = dataset.delta[i];
           dataRow[scale] = value;
           if (dataCharts[scale] === undefined) dataCharts[scale] = [];
           dataCharts[scale].push(dataRow);
@@ -221,6 +239,7 @@ export default function SoilMovement(props) {
 
   let selectTimeMode;
   let selectDatasetMode;
+  let selectFrameMode;
   let selectRange;
   let datetimeBegin;
   let datetimeEnd;
@@ -231,6 +250,7 @@ export default function SoilMovement(props) {
       setSearchParams({
         time: "live",
         dataset: selectDatasetMode.value,
+        frame: selectFrameMode.value,
         later: selectRange.value,
         begin: null,
         end: null
@@ -242,6 +262,7 @@ export default function SoilMovement(props) {
       setSearchParams({
         time: "history",
         dataset: selectDatasetMode.value,
+        frame: selectFrameMode.value,
         later: null,
         begin: datetimeBegin.value,
         end: datetimeEnd.value
@@ -264,6 +285,7 @@ export default function SoilMovement(props) {
   createEffect(() => {
     if (searchParams.time) selectTimeMode.value = searchParams.time;
     if (searchParams.dataset) selectDatasetMode.value = searchParams.dataset;
+    if (searchParams.frame) selectFrameMode.value = searchParams.frame;
     if (searchParams.later) selectRange.value = searchParams.later;
     if (searchParams.begin) datetimeBegin.value = searchParams.begin;
     if (searchParams.end) datetimeEnd.value = searchParams.end;
@@ -329,6 +351,16 @@ export default function SoilMovement(props) {
                 <option value="all">All</option>
               </select>
             </div>
+            <div class="mx-1 my-1 flex flex-row">
+              <label for="frame-mode" class="px-1.5 py-0.5 rounded-l-sm bg-sky-100 dark:bg-sky-950">Frame</label>
+              <select name="frame-mode" class="px-1 bg-white border border-sky-100 dark:bg-slate-800 dark:border-sky-950"
+                ref={selectFrameMode} onChange={() => setFrameMode(selectFrameMode.value)}
+              >
+                <option value="hourly">Hourly</option>
+                <option value="daily" selected>Daily</option>
+                <option value="weekly">Weekly</option>
+              </select>
+            </div>
             <div class="grow"></div>
             <div class="flex flex-row flex-wrap justify-between">
               <div class="mx-1 my-1 flex flex-row" classList={{"hidden": timeMode() != "live"}}>
@@ -378,7 +410,7 @@ export default function SoilMovement(props) {
                 </div>
               </div>
               <div class="p-3 bg-white dark:bg-gray-900">
-                <TimeChart data={dataCharts()[item.scale]} timestampColumn="ts" valueColumn={item.scale} valueRange={item.range} legend="Position" />
+                <BarChart data={dataCharts()[item.scale]} timestampColumn="ts" valueColumn={item.scale} valueRange={item.range} legend="Position" timeFrame={frameMode()} />
               </div>
             </div>
           </div>
