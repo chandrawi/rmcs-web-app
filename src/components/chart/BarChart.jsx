@@ -1,7 +1,7 @@
 import { createEffect } from "solid-js";
 import { darkTheme, stringToDate } from "../../store";
 
-export default function TimeChart(props) {
+export default function BarChart(props) {
 
   function domainRange() {
     let min = undefined;
@@ -22,24 +22,17 @@ export default function TimeChart(props) {
     return [min, max];
   };
 
-  function timeUnit() {
-    let unit = "seconds";
-    if (props.data && props.timestampColumn) {
-      let tsmin = undefined;
-      let tsmax = undefined;
-      for (const row of props.data) {
-        const ts = row[props.timestampColumn];
-        const timestamp = ts instanceof Date ? ts : stringToDate(row[props.timestampColumn]);
-        if (tsmin === undefined || timestamp.valueOf() < tsmin.valueOf()) tsmin = timestamp;
-        if (tsmax === undefined || timestamp.valueOf() > tsmax.valueOf()) tsmax = timestamp;
+  function formatDataTimestamp(data) {
+    if (!Array.isArray(data)) return [];
+    for(const i in data) {
+      if (props.timeFrame == "hourly") {
+        data[i][props.timestampColumn] = data[i][props.timestampColumn].slice(0, -3);
       }
-      const range = tsmin && tsmax ? tsmax.valueOf() - tsmin.valueOf() : 0;
-      if (range < 90000) unit = "seconds";
-      else if (range < 5400000) unit = "hoursminutesseconds";
-      else if (range < 129600000) unit = "hoursminutesseconds";
-      else unit = "monthdate";
+      if (props.timeFrame == "daily" || props.timeFrame == "weekly") {
+        data[i][props.timestampColumn] = data[i][props.timestampColumn].slice(0, -9);
+      }
     }
-    return unit;
+    return data;
   }
 
   const idstring = (id) => {
@@ -54,15 +47,13 @@ export default function TimeChart(props) {
     background: 'transparent',
     width: 'container',
     data: {
-      values: props.data
+      values: formatDataTimestamp(props.data)
     },
     mark: {
-      type: 'line',
-      interpolate: 'basis'
+      type: 'bar'
     },
     encoding: {
       x: {
-        timeUnit: timeUnit(), 
         field: props.timestampColumn, 
         title: "Timestamp"
       },
@@ -75,9 +66,8 @@ export default function TimeChart(props) {
           domainMax: domainRange()[1]
         }
       },
-      color: {
-        legend: {}
-      }
+      xOffset: {},
+      color: {}
     },
     config: {
       axis: {}
@@ -85,17 +75,16 @@ export default function TimeChart(props) {
   };
 
   if (props.legend) {
+    vlSpec.encoding.xOffset.field = props.legend;
     vlSpec.encoding.color.field = props.legend;
     vlSpec.encoding.color.type = "nominal";
   }
 
   createEffect(() => {
-    vlSpec.data.values = props.data;
+    vlSpec.data.values = formatDataTimestamp(props.data);
     vlSpec.config.axis.gridColor = darkTheme() ? "#1f2937" : "#e5e7eb";
     vlSpec.config.axis.labelColor = darkTheme() ? "#e5e7eb" : "#1f2937";
     vlSpec.config.axis.titleColor = darkTheme() ? "#e5e7eb" : "#1f2937";
-    vlSpec.encoding.color.legend.titleColor = darkTheme() ? "#e5e7eb" : "#1f2937";
-    vlSpec.encoding.color.legend.labelColor = darkTheme() ? "#e5e7eb" : "#1f2937";
     vegaEmbed('#chart-' + idstring(props.valueColumn), vlSpec);
   });
 
