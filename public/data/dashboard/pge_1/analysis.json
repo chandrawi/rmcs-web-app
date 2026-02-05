@@ -53,7 +53,7 @@
     },
     "config": {
       "live_ranges": [3600000, 14400000, 43200000, 86400000, 604800000, 2592000000],
-      "live_range": 3600000,
+      "live_range": 86400000,
       "view_mode": "graph",
       "float_precission": {"inclination-Y":5, "inclination-Z":5, "displacement-Y":3, "displacement-Z":3, "displacement":3, "direction": 3},
       "chart_value_range": [[0.1],[0.1],[0.1],[0.1],[0.1],[1]],

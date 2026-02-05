@@ -14,11 +14,11 @@ export default function DisplacementChange(props) {
 
   const [searchParams, setSearchParams] = useSearchParams();
   const initViewMode = searchParams.view ? searchParams.view : config("view_mode") ? config("view_mode") : "table";
-  const initTimeMode = searchParams.time ? searchParams.time : "live";
+  const initTimeMode = searchParams.time ? searchParams.time : config("time_mode") ? config("time_mode") : "live";
   const initDatasetMode = searchParams.dataset ? searchParams.dataset : "displacement_direction";
   const initFrameMode = searchParams.frame ? searchParams.frame : "hourly";
-  const initTimeLater= searchParams.later ? parseInt(searchParams.later) : config("live_range") ? config("live_range") : 300000;
-  const initTimeBegin = searchParams.begin && new Date(searchParams.begin) < new Date() ? new Date(searchParams.begin) : new Date();
+  const initTimeLater = searchParams.later ? parseInt(searchParams.later) : config("live_range") ? parseInt(config("live_range")) : 300000;
+  const initTimeBegin = searchParams.begin && new Date(searchParams.begin) < new Date() ? new Date(searchParams.begin) : new Date(Date.now() - parseInt(initTimeLater));
   const initTimeEnd = searchParams.end && new Date(searchParams.end) < new Date() ? new Date(searchParams.end) : new Date();
 
   let [viewMode, setViewMode] = createSignal(initViewMode);
@@ -337,8 +337,8 @@ export default function DisplacementChange(props) {
               <select name="time-mode" class="px-1 bg-white border border-sky-100 dark:bg-slate-800 dark:border-sky-950"
                 ref={selectTimeMode} onChange={() => setTimeMode(selectTimeMode.value)}
               >
-                <option value="live">Live</option>
-                <option value="history">History</option>
+                <option value="live" selected={timeMode() == "live"}>Live</option>
+                <option value="history" selected={timeMode() == "history"}>History</option>
               </select>
             </div>
             <div class="mx-1 my-1 flex flex-row">
@@ -370,7 +370,7 @@ export default function DisplacementChange(props) {
                 >
                   <For each={rangeList()}>
                   {(item) => (
-                    <option value={item}>{rangeName(item)}</option>
+                    <option value={item} selected={timeLater() == item}>{rangeName(item)}</option>
                   )}
                   </For>
                 </select>
@@ -379,12 +379,14 @@ export default function DisplacementChange(props) {
                 <label for="input-begin" class="min-w-[3rem] px-1.5 py-0.5 rounded-l-sm bg-slate-200 dark:bg-slate-700">Begin</label>
                 <input type="datetime-local" step="1" name="time-begin" class="w-[12rem] px-1 bg-white border border-slate-200 dark:bg-slate-800 dark:border-slate-700" 
                   ref={datetimeBegin}
+                  value={dateToString(timeBegin())}
                 />
               </div>
               <div class="mx-1 my-1 flex flex-row" classList={{"hidden": timeMode() != "history"}}>
                 <label for="input-end" class="min-w-[3rem] px-1.5 py-0.5 rounded-l-sm bg-slate-200 dark:bg-slate-700">End</label>
                 <input type="datetime-local" step="1" name="time-end" class="w-[12rem] px-1 bg-white border border-slate-200 dark:bg-slate-800 dark:border-slate-700" 
                   ref={datetimeEnd}
+                  value={dateToString(timeEnd())}
                 />
               </div>
               <div class="grow mx-1 my-1 flex flex-row justify-end">

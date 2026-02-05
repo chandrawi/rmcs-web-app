@@ -14,15 +14,15 @@ export default function SensorData(props) {
 
   const [searchParams, setSearchParams] = useSearchParams();
   const initViewMode = searchParams.view ? searchParams.view : config("view_mode") ? config("view_mode") : "table";
-  const initTimeMode = searchParams.time ? searchParams.time : "live";
-  const initTimeLast= searchParams.last ? parseInt(searchParams.last) : config("live_range") ? config("live_range") : 300000;
-  const initTimeBegin = searchParams.begin && new Date(searchParams.begin) < new Date() ? new Date(searchParams.begin) : new Date();
+  const initTimeMode = searchParams.time ? searchParams.time : config("time_mode") ? config("time_mode") : "live";
+  const initTimeLater = searchParams.later ? parseInt(searchParams.later) : config("live_range") ? parseInt(config("live_range")) : 300000;
+  const initTimeBegin = searchParams.begin && new Date(searchParams.begin) < new Date() ? new Date(searchParams.begin) : new Date(Date.now() - parseInt(initTimeLater));
   const initTimeEnd = searchParams.end && new Date(searchParams.end) < new Date() ? new Date(searchParams.end) : new Date();
 
   let [viewMode, setViewMode] = createSignal(initViewMode);
   let [timeMode, setTimeMode] = createSignal(initTimeMode);
 
-  let [timeLast, setTimeLast] = createSignal(initTimeLast);
+  let [timeLater, setTimeLater] = createSignal(initTimeLater);
   let [timeBegin, setTimeBegin] = createSignal(initTimeBegin);
   let [timeEnd, setTimeEnd] = createSignal(initTimeEnd);
 
@@ -32,11 +32,11 @@ export default function SensorData(props) {
 
   const [data, {refetch} ] = createResource(props.sensor, async (input) => {
     if (timeMode() == "live") {
-      const tLast = new Date(Date.now() - timeLast());
+      const tLater = new Date(Date.now() - timeLater());
       return await list_data_by_range(resourceServer.get(props.apiId), {
         device_id: input.device_id,
         model_id: input.model_id,
-        begin: tLast,
+        begin: tLater,
         end: new Date(Date.now())
       });
     }
@@ -149,17 +149,17 @@ export default function SensorData(props) {
     if (selectTimeMode.value == "live") {
       setSearchParams({
         time: "live",
-        last: selectRange.value,
+        later: selectRange.value,
         begin: null,
         end: null
       });
-      setTimeLast(parseInt(selectRange.value));
+      setTimeLater(parseInt(selectRange.value));
       refetch();
     }
     else if (selectTimeMode.value == "history") {
       setSearchParams({
         time: "history",
-        last: null,
+        later: null,
         begin: datetimeBegin.value,
         end: datetimeEnd.value
       });
@@ -180,7 +180,7 @@ export default function SensorData(props) {
 
   createEffect(() => {
     if (searchParams.time) selectTimeMode.value = searchParams.time;
-    if (searchParams.last) selectRange.value = searchParams.last;
+    if (searchParams.later) selectRange.value = searchParams.later;
     if (searchParams.begin) datetimeBegin.value = searchParams.begin;
     if (searchParams.end) datetimeEnd.value = searchParams.end;
   });
@@ -188,7 +188,7 @@ export default function SensorData(props) {
   const [rangeList, setRangeList] = createSignal([300000, 900000, 1800000, 3600000]);
   createEffect(() => {
     if (Array.isArray(config("live_ranges"))) setRangeList(config("live_ranges"));
-    if (config("live_range")) selectRange.value = searchParams.last ? searchParams.last : config("live_range");
+    if (config("live_range")) selectRange.value = searchParams.later ? searchParams.later : config("live_range");
   });
   function rangeName(range) {
     if (range < 60000) return String(range / 1000) + " seconds";
@@ -231,20 +231,20 @@ export default function SensorData(props) {
               <select name="time-mode" class="px-1 bg-white border border-sky-100 dark:bg-slate-800 dark:border-sky-950"
                 ref={selectTimeMode} onChange={() => setTimeMode(selectTimeMode.value)}
               >
-                <option value="live">Live</option>
-                <option value="history">History</option>
+                <option value="live" selected={timeMode() == "live"}>Live</option>
+                <option value="history" selected={timeMode() == "history"}>History</option>
               </select>
             </div>
             <div class="grow"></div>
             <div class="flex flex-row flex-wrap justify-between">
               <div class="mx-1 my-1 flex flex-row" classList={{"hidden": timeMode() != "live"}}>
-                <label for="input-last" class="px-1.5 py-0.5 rounded-l-sm bg-slate-200 dark:bg-slate-700">Range</label>
-                <select name="time-last" class="px-1 bg-white border border-slate-200 dark:bg-slate-800 dark:border-slate-700"
+                <label for="input-later" class="px-1.5 py-0.5 rounded-l-sm bg-slate-200 dark:bg-slate-700">Range</label>
+                <select name="time-later" class="px-1 bg-white border border-slate-200 dark:bg-slate-800 dark:border-slate-700"
                   ref={selectRange}
                 >
                   <For each={rangeList()}>
                   {(item) => (
-                    <option value={item}>{rangeName(item)}</option>
+                    <option value={item} selected={timeLater() == item}>{rangeName(item)}</option>
                   )}
                   </For>
                 </select>
@@ -253,12 +253,14 @@ export default function SensorData(props) {
                 <label for="input-begin" class="min-w-[3rem] px-1.5 py-0.5 rounded-l-sm bg-slate-200 dark:bg-slate-700">Begin</label>
                 <input type="datetime-local" step="1" name="time-begin" class="w-[12rem] px-1 bg-white border border-slate-200 dark:bg-slate-800 dark:border-slate-700" 
                   ref={datetimeBegin}
+                  value={dateToString(timeBegin())}
                 />
               </div>
               <div class="mx-1 my-1 flex flex-row" classList={{"hidden": timeMode() != "history"}}>
                 <label for="input-end" class="min-w-[3rem] px-1.5 py-0.5 rounded-l-sm bg-slate-200 dark:bg-slate-700">End</label>
                 <input type="datetime-local" step="1" name="time-end" class="w-[12rem] px-1 bg-white border border-slate-200 dark:bg-slate-800 dark:border-slate-700" 
                   ref={datetimeEnd}
+                  value={dateToString(timeEnd())}
                 />
               </div>
               <div class="grow mx-1 my-1 flex flex-row justify-end">

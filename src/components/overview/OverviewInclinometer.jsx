@@ -16,11 +16,12 @@ export default function OverviewInclinometer(props) {
   const [searchParams, setSearchParams] = useSearchParams();
   const initDomainMode = searchParams.domain ? searchParams.domain : "timestamp";
   const initViewMode = searchParams.view ? searchParams.view : config("view_mode") ? config("view_mode") : "table";
-  const initTimeMode = searchParams.time ? searchParams.time : "live";
+  const initTimeMode = searchParams.time ? searchParams.time : config("time_mode") ? config("time_mode") : "live";
   const initFilterMode = searchParams.filter ? searchParams.filter : "all";
   const initDatasetMode = searchParams.dataset ? searchParams.dataset : "displacement_direction";
-  const initTimeLater= searchParams.later ? parseInt(searchParams.later) : config("live_range") ? config("live_range") : 300000;
-  const initTimeBegin = searchParams.begin && new Date(searchParams.begin) < new Date() ? new Date(searchParams.begin) : new Date();
+  const initFrameMode = searchParams.frame ? searchParams.frame : "daily";
+  const initTimeLater = searchParams.later ? parseInt(searchParams.later) : config("live_range") ? parseInt(config("live_range")) : 300000;
+  const initTimeBegin = searchParams.begin && new Date(searchParams.begin) < new Date() ? new Date(searchParams.begin) : new Date(Date.now() - parseInt(initTimeLater));
   const initTimeEnd = searchParams.end && new Date(searchParams.end) < new Date() ? new Date(searchParams.end) : new Date();
   const initTimeSpecific = searchParams.specific && new Date(searchParams.specific) < new Date() ? new Date(searchParams.specific) : new Date();
 
@@ -29,6 +30,7 @@ export default function OverviewInclinometer(props) {
   let [timeMode, setTimeMode] = createSignal(initTimeMode);
   let [filterMode, setFilterMode] = createSignal(initFilterMode);
   let [datasetMode, setDatasetMode] = createSignal(initDatasetMode);
+  let [frameMode, setFrameMode] = createSignal(initFrameMode);
 
   let [timeLater, setTimeLater] = createSignal(initTimeLater);
   let [timeBegin, setTimeBegin] = createSignal(initTimeBegin);
@@ -82,19 +84,25 @@ export default function OverviewInclinometer(props) {
   };
 
   const [dataset, {refetch}] = createResource(props.analysis, async (input) => {
+    const frame = config("time_frame")[frameMode()];
+    const tag = config("time_frame_tag")[frameMode()];
     if (timeMode() == "live") {
-      const tLater = new Date(Date.now() - timeLater());
+      const tNow = Date.now();
+      const tEnd = tNow - (tNow % frame);
+      const tBegin = tEnd - parseInt(timeLater());
       return await list_data_set_by_range(resourceServer.get(props.apiId), {
         set_id: input.set_id,
-        begin: tLater,
-        end: new Date(Date.now())
+        begin: new Date(tBegin),
+        end: new Date(tEnd),
+        tag: tag
       });
     }
     else if (timeMode() == "history" && filterMode() != "specific") {
       return await list_data_set_by_range(resourceServer.get(props.apiId), {
         set_id: input.set_id,
         begin: timeBegin(),
-        end: timeEnd()
+        end: timeEnd(),
+        tag: tag
       });
     }
     else if (timeMode() == "history" && filterMode() == "specific") {
@@ -264,6 +272,7 @@ export default function OverviewInclinometer(props) {
   let selectTimeMode;
   let selectFilterMode;
   let selectDatasetMode;
+  let selectFrameMode;
   let selectRange;
   let datetimeBegin;
   let datetimeEnd;
@@ -277,6 +286,7 @@ export default function OverviewInclinometer(props) {
         domain: selectDomainMode.value,
         filter: selectFilterMode.value,
         dataset: selectDatasetMode.value,
+        frame: selectFrameMode.value,
         later: selectRange.value,
         begin: null,
         end: null,
@@ -291,6 +301,7 @@ export default function OverviewInclinometer(props) {
         domain: selectDomainMode.value,
         filter: selectFilterMode.value,
         dataset: selectDatasetMode.value,
+        frame: selectFrameMode.value,
         later: null,
         begin: filterMode() != "specific" ? datetimeBegin.value : null,
         end: filterMode() != "specific" ? datetimeEnd.value : null,
@@ -314,10 +325,13 @@ export default function OverviewInclinometer(props) {
     });
   }
 
+  let init_flag = true;
   createEffect(() => {
+    selectRange.value = timeLater();
     if (searchParams.time) selectTimeMode.value = searchParams.time;
     if (searchParams.domain) selectDomainMode.value = searchParams.domain;
-    if (searchParams.data) selectFilterMode.value = searchParams.data;
+    if (searchParams.filter) selectFilterMode.value = searchParams.data;
+    if (searchParams.frame) selectFrameMode.value = searchParams.frame;
     if (searchParams.later) selectRange.value = searchParams.later;
     if (searchParams.begin) datetimeBegin.value = searchParams.begin;
     if (searchParams.end) datetimeEnd.value = searchParams.end;
@@ -379,8 +393,8 @@ export default function OverviewInclinometer(props) {
               <select name="time-mode" class="px-1 bg-white border border-sky-100 dark:bg-slate-800 dark:border-sky-950"
                 ref={selectTimeMode} onChange={() => setTimeMode(selectTimeMode.value)}
               >
-                <option value="live">Live</option>
-                <option value="history">History</option>
+                <option value="live" selected={timeMode() == "live"}>Live</option>
+                <option value="history" selected={timeMode() == "history"}>History</option>
               </select>
             </div>
             <div class="mx-1 my-1 flex flex-row">
@@ -403,6 +417,16 @@ export default function OverviewInclinometer(props) {
                 <option value="displacement_direction" selected>Displacement & Direction</option>
               </select>
             </div>
+            <div class="mx-1 my-1 flex flex-row">
+              <label for="frame-mode" class="px-1.5 py-0.5 rounded-l-sm bg-sky-100 dark:bg-sky-950">Frame</label>
+              <select name="frame-mode" class="px-1 bg-white border border-sky-100 dark:bg-slate-800 dark:border-sky-950"
+                ref={selectFrameMode} onChange={() => setFrameMode(selectFrameMode.value)}
+              >
+                <option value="hourly">Hourly</option>
+                <option value="daily" selected>Daily</option>
+                <option value="weekly">Weekly</option>
+              </select>
+            </div>
             <div class="grow"></div>
             <div class="flex flex-row flex-wrap justify-between">
               <div class="mx-1 my-1 flex flex-row" classList={{"hidden": timeMode() != "live" || filterMode() == "specific"}}>
@@ -412,7 +436,7 @@ export default function OverviewInclinometer(props) {
                 >
                   <For each={rangeList()}>
                   {(item) => (
-                    <option value={item}>{rangeName(item)}</option>
+                    <option value={item} selected={timeLater() == item}>{rangeName(item)}</option>
                   )}
                   </For>
                 </select>
@@ -421,18 +445,21 @@ export default function OverviewInclinometer(props) {
                 <label for="input-begin" class="min-w-[3rem] px-1.5 py-0.5 rounded-l-sm bg-slate-200 dark:bg-slate-700">Begin</label>
                 <input type="datetime-local" step="1" name="time-begin" class="w-[12rem] px-1 bg-white border border-slate-200 dark:bg-slate-800 dark:border-slate-700" 
                   ref={datetimeBegin}
+                  value={dateToString(timeBegin())}
                 />
               </div>
               <div class="mx-1 my-1 flex flex-row" classList={{"hidden": timeMode() != "history" || filterMode() == "specific"}}>
                 <label for="input-end" class="min-w-[3rem] px-1.5 py-0.5 rounded-l-sm bg-slate-200 dark:bg-slate-700">End</label>
                 <input type="datetime-local" step="1" name="time-end" class="w-[12rem] px-1 bg-white border border-slate-200 dark:bg-slate-800 dark:border-slate-700" 
                   ref={datetimeEnd}
+                  value={dateToString(timeEnd())}
                 />
               </div>
               <div class="mx-1 my-1 flex flex-row" classList={{"hidden": filterMode() != "specific"}}>
                 <label for="input-specific" class="min-w-[3rem] px-1.5 py-0.5 rounded-l-sm bg-slate-200 dark:bg-slate-700">Datetime</label>
                 <input type="datetime-local" step="1" name="time-specific" class="w-[12rem] px-1 bg-white border border-slate-200 dark:bg-slate-800 dark:border-slate-700" 
                   ref={datetimeSpecific}
+                  value={dateToString(timeSpecific())}
                 />
               </div>
               <div class="grow mx-1 my-1 flex flex-row justify-end">

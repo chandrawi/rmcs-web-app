@@ -34,10 +34,13 @@ export default function TimeChart(props) {
         if (tsmax === undefined || timestamp.valueOf() > tsmax.valueOf()) tsmax = timestamp;
       }
       const range = tsmin && tsmax ? tsmax.valueOf() - tsmin.valueOf() : 0;
-      if (range < 90000) unit = "seconds";
-      else if (range < 5400000) unit = "hoursminutesseconds";
-      else if (range < 129600000) unit = "hoursminutesseconds";
-      else unit = "monthdate";
+      if (tsmin.getFullYear() != tsmax.getFullYear()) unit = "binnedyearmonthdate";
+      else if (tsmin.getMonth() != tsmax.getMonth()) unit = "binnedmonthdate";
+      else if (tsmin.getDate() != tsmax.getDate()) {
+        if (range > 172800000) unit = "binnedmonthdate";
+        else unit = "binneddatehoursminutes";
+      }
+      else unit = "binnedhoursminutes";
     }
     return unit;
   }
