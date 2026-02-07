@@ -101,7 +101,7 @@ export default function DisplacementChange(props) {
   });
 
   /**
-   * @returns {{ timestamp: Date|undefined, position: number, data: number[], delta: number[], group: string }[]}
+   * @returns {{ timestamp: Date|undefined, position: number, data: number[], delta: number[] }[]}
    */
   const datasetMap = () => {
     let datasets = dataset();
@@ -346,8 +346,8 @@ export default function DisplacementChange(props) {
               <select name="dataset-mode" class="px-1 bg-white border border-sky-100 dark:bg-slate-800 dark:border-sky-950"
                 ref={selectDatasetMode} onChange={() => setDatasetMode(selectDatasetMode.value)}
               >
-                <option value="displacement_component">Displacement Component</option>
-                <option value="displacement_direction" selected>Displacement & Direction</option>
+                <option value="displacement_component" selected={datasetMode() == "displacement_component"}>Displacement Component</option>
+                <option value="displacement_direction" selected={datasetMode() == "displacement_direction"}>Displacement & Direction</option>
                 <option value="all">All</option>
               </select>
             </div>
@@ -356,9 +356,9 @@ export default function DisplacementChange(props) {
               <select name="frame-mode" class="px-1 bg-white border border-sky-100 dark:bg-slate-800 dark:border-sky-950"
                 ref={selectFrameMode} onChange={() => setFrameMode(selectFrameMode.value)}
               >
-                <option value="hourly">Hourly</option>
-                <option value="daily" selected>Daily</option>
-                <option value="weekly">Weekly</option>
+                <option value="hourly" selected={frameMode() == "hourly"}>Hourly</option>
+                <option value="daily" selected={frameMode() == "daily"}>Daily</option>
+                <option value="weekly" selected={frameMode() == "weekly"}>Weekly</option>
               </select>
             </div>
             <div class="grow"></div>

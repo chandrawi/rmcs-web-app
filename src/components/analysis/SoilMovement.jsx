@@ -16,6 +16,7 @@ export default function SoilMovement(props) {
   const initViewMode = searchParams.view ? searchParams.view : config("view_mode") ? config("view_mode") : "table";
   const initTimeMode = searchParams.time ? searchParams.time : config("time_mode") ? config("time_mode") : "live";
   const initDatasetMode = searchParams.dataset ? searchParams.dataset : "displacement_direction";
+  const initFrameMode = searchParams.frame ? searchParams.frame : "hourly";
   const initTimeLater= searchParams.later ? parseInt(searchParams.later) : config("live_range") ? parseInt(config("live_range")) : 300000;
   const initTimeBegin = searchParams.begin && new Date(searchParams.begin) < new Date() ? new Date(searchParams.begin) : new Date(Date.now() - parseInt(initTimeLater));
   const initTimeEnd = searchParams.end && new Date(searchParams.end) < new Date() ? new Date(searchParams.end) : new Date();
@@ -23,6 +24,7 @@ export default function SoilMovement(props) {
   let [viewMode, setViewMode] = createSignal(initViewMode);
   let [timeMode, setTimeMode] = createSignal(initTimeMode);
   let [datasetMode, setDatasetMode] = createSignal(initDatasetMode);
+  let [frameMode, setFrameMode] = createSignal(initFrameMode);
 
   let [timeLater, setTimeLater] = createSignal(initTimeLater);
   let [timeBegin, setTimeBegin] = createSignal(initTimeBegin);
@@ -75,19 +77,25 @@ export default function SoilMovement(props) {
   };
 
   const [dataset, {refetch}] = createResource(props.analysis, async (input) => {
+    const frame = config("time_frame")[frameMode()];
+    const tag = config("time_frame_tag")[frameMode()];
     if (timeMode() == "live") {
-      const tLater = new Date(Date.now() - timeLater());
+      const tNow = Date.now();
+      const tEnd = tNow - (tNow % frame);
+      const tBegin = tEnd - parseInt(timeLater());
       return await list_data_set_by_range(resourceServer.get(props.apiId), {
         set_id: input.set_id,
-        begin: tLater,
-        end: new Date(Date.now())
+        begin: new Date(tBegin),
+        end: new Date(tEnd),
+        tag: tag == 0 ? undefined : tag
       });
     }
     else if (timeMode() == "history") {
       return await list_data_set_by_range(resourceServer.get(props.apiId), {
         set_id: input.set_id,
         begin: timeBegin(),
-        end: timeEnd()
+        end: timeEnd(),
+        tag: tag == 0 ? undefined : tag
       });
     }
   });
@@ -221,6 +229,7 @@ export default function SoilMovement(props) {
 
   let selectTimeMode;
   let selectDatasetMode;
+  let selectFrameMode;
   let selectRange;
   let datetimeBegin;
   let datetimeEnd;
@@ -231,6 +240,7 @@ export default function SoilMovement(props) {
       setSearchParams({
         time: "live",
         dataset: selectDatasetMode.value,
+        frame: selectFrameMode.value,
         later: selectRange.value,
         begin: null,
         end: null
@@ -242,6 +252,7 @@ export default function SoilMovement(props) {
       setSearchParams({
         time: "history",
         dataset: selectDatasetMode.value,
+        frame: selectFrameMode.value,
         later: null,
         begin: datetimeBegin.value,
         end: datetimeEnd.value
@@ -263,6 +274,7 @@ export default function SoilMovement(props) {
 
   createEffect(() => {
     if (searchParams.time) selectTimeMode.value = searchParams.time;
+    if (searchParams.frame) selectFrameMode.value = searchParams.frame;
     if (searchParams.dataset) selectDatasetMode.value = searchParams.dataset;
     if (searchParams.later) selectRange.value = searchParams.later;
     if (searchParams.begin) datetimeBegin.value = searchParams.begin;
@@ -324,9 +336,20 @@ export default function SoilMovement(props) {
               <select name="dataset-mode" class="px-1 bg-white border border-sky-100 dark:bg-slate-800 dark:border-sky-950"
                 ref={selectDatasetMode} onChange={() => setDatasetMode(selectDatasetMode.value)}
               >
-                <option value="displacement_component">Displacement Component</option>
-                <option value="displacement_direction" selected>Displacement & Direction</option>
+                <option value="displacement_component" selected={datasetMode() == "displacement_component"}>Displacement Component</option>
+                <option value="displacement_direction" selected={datasetMode() == "displacement_direction"}>Displacement & Direction</option>
                 <option value="all">All</option>
+              </select>
+            </div>
+            <div class="mx-1 my-1 flex flex-row">
+              <label for="frame-mode" class="px-1.5 py-0.5 rounded-l-sm bg-sky-100 dark:bg-sky-950">Frame</label>
+              <select name="frame-mode" class="px-1 bg-white border border-sky-100 dark:bg-slate-800 dark:border-sky-950"
+                ref={selectFrameMode} onChange={() => setFrameMode(selectFrameMode.value)}
+              >
+                <option value="minutely" selected={frameMode() == "minutely"}>Minutely</option>
+                <option value="hourly" selected={frameMode() == "hourly"}>Hourly</option>
+                <option value="daily" selected={frameMode() == "daily"}>Daily</option>
+                <option value="weekly" selected={frameMode() == "weekly"}>Weekly</option>
               </select>
             </div>
             <div class="grow"></div>

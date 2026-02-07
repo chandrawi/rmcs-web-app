@@ -382,11 +382,11 @@ export default function InclinometerShape(props) {
               <select name="dataset-mode" class="px-1 bg-white border border-sky-100 dark:bg-slate-800 dark:border-sky-950"
                 ref={selectDatasetMode} onChange={() => setDatasetMode(selectDatasetMode.value)}
               >
-                <option value="angle">Angle</option>
-                <option value="displacement_component">Displacement Component</option>
-                <option value="displacement_direction">Displacement & Direction</option>
-                <option value="angle_displacement" selected>Angle & Displacement</option>
-                <option value="all">All</option>
+                <option value="angle" selected={datasetMode() == "angle"}>Angle</option>
+                <option value="displacement_component" selected={datasetMode() == "displacement_component"}>Displacement Component</option>
+                <option value="displacement_direction" selected={datasetMode() == "displacement_direction"}>Displacement & Direction</option>
+                <option value="angle_displacement" selected={datasetMode() == "angle_displacement"}>Angle & Displacement</option>
+                <option value="all" selected={datasetMode() == "all"}>All</option>
               </select>
             </div>
             <div class="grow"></div>

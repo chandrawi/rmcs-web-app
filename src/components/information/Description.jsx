@@ -6,8 +6,8 @@ export default function Description() {
         <div class="w-full xs:px-1 py-1">
           <div class="xs:rounded-sm border border-slate-200 dark:border-slate-700">
             <div class="flex flex-row items-center bg-gray-100 dark:bg-gray-800">
-              <div class="mx-3 my-1.5 flex flex-row items-center font-medium">
-                <span class="align-middle text-sm">Sistem Pemantauan Longsor PGE Hululais</span>
+              <div class="mx-3 my-1.5 flex flex-row items-center font-semibold">
+                <span class="align-middle">Sistem Pemantauan Longsor PGE Hululais</span>
               </div>
             </div>
             <div class="flex flex-row justify-center py-3 px-6 bg-white dark:bg-gray-900">
