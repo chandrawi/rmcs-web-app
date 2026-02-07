@@ -11,15 +11,15 @@ export default function Description() {
               </div>
             </div>
             <div class="flex flex-row justify-center py-3 px-6 bg-white dark:bg-gray-900">
-              <article class="prose text-gray-900 py-4 max-w-[80ch]">              
-                <h3>Objek Pemantauan</h3>
+              <article class="prose text-gray-900 py-4 max-w-[80ch] dark:text-gray-200">               
+                <h3 class="text-sky-900 dark:text-sky-200">Objek Pemantauan</h3>
                 <p class="text-base/6 my-2">
                   Sistem pemantauan longsor adalah sistem untuk memantau pergerakan tanah di suatu area dan memberi peringatan sebelum terjadinya longsor. Salah satu metode untuk mengukur pergerakan tanah adalah dengan mengukur kemiringan beberapa titik di bawah tanah. Data kemiringan lalu diolah menjadi pergerakan tanah. Kumpulan data pergerakan tanah ini dipantau secara berkala untuk dibandingkan dengan kriteria ambang batas longsor. Peringatan akan diberikan saat pergerakan tanah melebihi kriteria ambang batas longsor.
                 </p>
                 <p class="text-base/6 my-2">
                   Sumur uap panas bumi banyak terletak pada daerah rawan longsor. Salah satunya di sumur uap milik PT Pertamina Geothermal Energy (PGE) di Hululais, kabupaten Lebong, Bengkulu. Sistem pemantauan ditempat ini ditujukan sebagai bagian dari tindak pengamanan asset-aset di lokasi sekitar sumur uap dari resiko longsor.
                 </p>
-                <h3>Aplikasi</h3>
+                <h3 class="text-sky-900 dark:text-sky-200">Aplikasi</h3>
                 <p class="text-base/6 my-2">
                   Pemantauan longsor di sumur uap PGE Hululais dilakukan dengan cara mengebor tanah lalu memasang susunan sensor inklinometer digital. Sensor tersebut akan mengukur kemiringan secara terus menerus. Selain sensor inklinometer, dipasang juga sensor-sensor kondisi lingkungan antara lain sensor curah hujan, sensor piezometer untuk mengukur permukaan air tanah, serta sensor temperatur dan kelembaban udara.
                 </p>

@@ -8,6 +8,7 @@
     "config": {
       "live_ranges": [300000, 900000, 1800000, 3600000, 14400000, 43200000, 86400000],
       "live_range": 2592000000,
+      "history_begin": "2025-08-01 00:00:00",
       "view_mode": "graph",
       "time_mode": "history",
       "float_precission": {"displacement-Y":3, "displacement-Z":3, "displacement":3, "direction": 3},

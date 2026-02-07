@@ -88,7 +88,7 @@ export default function ItemList(props) {
       <div class="w-full max-w-[48rem] xs:rounded-sm border border-slate-200 dark:border-slate-700">
         <div class="w-full flex flex-row items-center justify-between bg-gray-100 dark:bg-gray-800">
           <div class="mx-3 my-1.5 flex flex-row items-center font-semibold">
-          <span class={(props.config.icon ? props.config.icon : "icon-list_square") + " text-[1.5rem] align-middle"}></span>
+            <span class={(props.config.icon ? props.config.icon : "icon-list_square") + " text-[1.5rem] align-middle"}></span>
             <span class="ml-1.5 align-middle">{props.config.text}&nbsp;</span>
           </div>
           <div class="mx-3 my-auto flex flex-row text-sm">

@@ -19,9 +19,9 @@ export default function OverviewInclinometer(props) {
   const initTimeMode = searchParams.time ? searchParams.time : config("time_mode") ? config("time_mode") : "live";
   const initFilterMode = searchParams.filter ? searchParams.filter : "all";
   const initDatasetMode = searchParams.dataset ? searchParams.dataset : "displacement_direction";
-  const initFrameMode = searchParams.frame ? searchParams.frame : "daily";
+  const initFrameMode = searchParams.frame ? searchParams.frame : "weekly";
   const initTimeLater = searchParams.later ? parseInt(searchParams.later) : config("live_range") ? parseInt(config("live_range")) : 300000;
-  const initTimeBegin = searchParams.begin && new Date(searchParams.begin) < new Date() ? new Date(searchParams.begin) : new Date(Date.now() - parseInt(initTimeLater));
+  const initTimeBegin = searchParams.begin && new Date(searchParams.begin) < new Date() ? new Date(searchParams.begin) : config("history_begin") ? new Date(config("history_begin")) : new Date();
   const initTimeEnd = searchParams.end && new Date(searchParams.end) < new Date() ? new Date(searchParams.end) : new Date();
   const initTimeSpecific = searchParams.specific && new Date(searchParams.specific) < new Date() ? new Date(searchParams.specific) : new Date();
 
