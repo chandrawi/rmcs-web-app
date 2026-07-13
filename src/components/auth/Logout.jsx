@@ -15,10 +15,10 @@ export default function Logout() {
       resourceServer.unsetToken(api_id);
     }
     setUserId(null);
-    navigate("/", {replace:true});
+    navigate("/login", {replace:true});
   }).catch(() => {
     setUserId(null);
-    navigate("/", {replace:true});
+    navigate("/login", {replace:true});
   });
 
   return (

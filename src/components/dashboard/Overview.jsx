@@ -1,14 +1,13 @@
 import { Show, createResource, createEffect } from "solid-js";
 import { useParams } from "@solidjs/router";
 import { DEFAULT_DASHBOARD } from "../../store";
-import OverviewInclinometer from "../overview/OverviewInclinometer";
 
 export default function Overview() {
 
   const params = useParams();
   const dashboardName = () => params.name ? params.name : DEFAULT_DASHBOARD;
-  const analysisType = () => "soil_movement";
-  const analysisName = () => "Soil Movement 1";
+  const analysisType = () => "sparing_sensor";
+  const analysisName = () => "Sparing Sensor";
 
   const [dashboard] = createResource(dashboardName, async (name) => {
     const response = await fetch(`/data/dashboard/${name}/dashboard.json`);
@@ -49,7 +48,7 @@ export default function Overview() {
 
   return (
     <Show when={analysis()}>
-      <OverviewInclinometer apiId={apiId()} analysis={analysis()} />
+      
     </Show>
   );
 }
