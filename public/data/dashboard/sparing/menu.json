@@ -14,63 +14,77 @@
   "link": ""
 }, {
   "id": 2,
-  "parent_id": 2,
+  "parent_id": 1,
+  "name": "description",
+  "text": "Description",
+  "icon": "icon-list_square",
+  "link": ""
+}, {
+  "id": 3,
+  "parent_id": 1,
+  "name": "specification",
+  "text": "Specification",
+  "icon": "icon-list_square",
+  "link": ""
+}, {
+  "id": 5,
+  "parent_id": 5,
   "name": "sensor",
   "text": "Sensor",
   "icon": "icon-sensor_device",
   "link": ""
 }, {
-  "id": 3,
-  "parent_id": 2,
+  "id": 6,
+  "parent_id": 5,
   "name": "flow",
   "text": "Flow",
   "icon": "icon-list_square",
   "link": ""
 }, {
-  "id": 4,
-  "parent_id": 2,
+  "id": 7,
+  "parent_id": 5,
   "name": "tss",
   "text": "TSS",
   "icon": "icon-list_square",
   "link": ""
 }, {
-  "id": 5,
-  "parent_id": 2,
+  "id": 8,
+  "parent_id": 5,
   "name": "ph",
   "text": "pH",
   "icon": "icon-list_square",
   "link": ""
 }, {
-  "id": 6,
-  "parent_id": 2,
+  "id": 9,
+  "parent_id": 5,
   "name": "cod",
   "text": "COD",
   "icon": "icon-list_square",
   "link": ""
 }, {
-  "id": 7,
-  "parent_id": 2,
+  "id": 10,
+  "parent_id": 5,
   "name": "nh3n",
   "text": "NH3N",
   "icon": "icon-list_square",
   "link": ""
 }, {
-  "id": 8,
-  "parent_id": 2,
+  "id": 11,
+  "parent_id": 5,
   "name": "power_monitor",
   "text": "Power Monitor",
   "icon": "icon-list_square",
   "link": ""
 }, {
-  "id": 9,
-  "parent_id": 9,
+  "id": 12,
+  "parent_id": 12,
   "name": "analysis",
-  "text": "Analysis",
+  "text": "Dataset",
   "icon": "icon-analysis",
   "link": ""
 }, {
-  "id": 10,
-  "parent_id": 9,
+  "id": 13,
+  "parent_id": 12,
   "name": "sparing_sensors",
   "text": "Sparing Sensors",
   "icon": "icon-list_square",

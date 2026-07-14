@@ -3,7 +3,6 @@ import { DEFAULT_DASHBOARD } from "../../store";
 import Breadcrumb from "../navigation/Breadcrumb";
 import Description from "../information/Description";
 import Specification from "../information/Specification";
-import Gallery from "../information/Gallery";
 
 export default function Information() {
 
@@ -19,10 +18,6 @@ export default function Information() {
     {
       name: "specification",
       text: "Specification"
-    },
-    {
-      name: "gallery",
-      text: "Gallery"
     }
   ];
 
@@ -37,9 +32,6 @@ export default function Information() {
       </Match>
       <Match when={child1() == "specification"}>
         <Specification />
-      </Match>
-      <Match when={child1() == "gallery"}>
-        <Gallery />
       </Match>
     </Switch>
     </>
