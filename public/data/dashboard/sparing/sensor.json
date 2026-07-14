@@ -3,7 +3,7 @@
     "text": "Flow Sensor",
     "icon": "icon-list_square",
     "model_id": "1465e00f-41bb-4d74-88ad-67e7bcdf6181",
-    "model_index": [0, 1, 2],
+    "model_index": [0],
     "device_id": {
       "Flow_testing": "1ef8147e-4c54-404f-890a-2bff30c46556"
     },
@@ -11,8 +11,8 @@
       "live_ranges": [300000, 900000, 1800000, 3600000, 14400000, 43200000, 86400000],
       "live_range": 3600000,
       "view_mode": "graph",
-      "float_precission": 3,
-      "chart_value_range": [[0.1],[0.1],[0.1]],
+      "float_precission": 4,
+      "chart_value_range": [[0.1]],
       "max_lost": 900000
     }
   },
@@ -20,7 +20,7 @@
     "text": "TSS Sensor",
     "icon": "icon-list_square",
     "model_id": "4728932b-7e61-4793-a0cc-e3a9b789ebcf",
-    "model_index": [0, 1],
+    "model_index": [0],
     "device_id": {
       "TSS_testing": "27d99e5a-09fe-466b-adab-d253ff2ba46d"
     },
@@ -28,8 +28,8 @@
       "live_ranges": [300000, 900000, 1800000, 3600000, 14400000, 43200000, 86400000],
       "live_range": 3600000,
       "view_mode": "graph",
-      "float_precission": 3,
-      "chart_value_range": [[50],[5]],
+      "float_precission": 2,
+      "chart_value_range": [[10]],
       "max_lost": 900000
     }
   },
@@ -37,7 +37,7 @@
     "text": "pH Sensor",
     "icon": "icon-list_square",
     "model_id": "7a07c4a7-517b-4c0b-93ac-703a0d1be8e3",
-    "model_index": [0, 1, 2, 3],
+    "model_index": [0],
     "device_id": {
       "pH_testing": "37093fd7-2d84-420c-bf5d-637e12b4b8f3"
     },
@@ -45,7 +45,8 @@
       "live_ranges": [300000, 900000, 1800000, 3600000, 14400000, 43200000, 86400000],
       "live_range": 3600000,
       "view_mode": "graph",
-      "chart_value_range": [[2],[2],[10],[10]],
+      "float_precission": 3,
+      "chart_value_range": [[1]],
       "max_lost": 900000
     }
   },
@@ -53,7 +54,7 @@
     "text": "COD Sensor",
     "icon": "icon-list_square",
     "model_id": "979b5263-9df6-4434-b870-e00b0855d7ed",
-    "model_index": [0, 1, 2],
+    "model_index": [0],
     "device_id": {
       "COD_testing": "489c1eb3-edfe-41c0-8be0-f73bfe27bdf7"
     },
@@ -61,8 +62,8 @@
       "live_ranges": [300000, 900000, 1800000, 3600000, 14400000, 43200000, 86400000],
       "live_range": 3600000,
       "view_mode": "graph",
-      "float_precission": 3,
-      "chart_value_range": [[10],[10],[50]],
+      "float_precission": 2,
+      "chart_value_range": [[10]],
       "max_lost": 900000
     }
   },
@@ -70,7 +71,7 @@
     "text": "NH3N Sensor",
     "icon": "icon-list_square",
     "model_id": "bf95f00f-d59f-4fc6-8979-31a5500faecb",
-    "model_index": [0, 1, 2],
+    "model_index": [0],
     "device_id": {
       "NH3N_testing": "5761bcbe-586a-48c4-8074-16b8d75bc238"
     },
@@ -78,8 +79,8 @@
       "live_ranges": [300000, 900000, 1800000, 3600000, 14400000, 43200000, 86400000],
       "live_range": 3600000,
       "view_mode": "graph",
-      "float_precission": 3,
-      "chart_value_range": [[10],[10],[50]],
+      "float_precission": 2,
+      "chart_value_range": [[10]],
       "max_lost": 900000
     }
   },

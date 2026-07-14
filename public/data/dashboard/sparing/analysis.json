@@ -9,8 +9,8 @@
       "live_ranges": [1800000, 3600000, 14400000, 43200000, 86400000],
       "live_range": 3600000,
       "view_mode": "graph",
-      "float_precission": {"flow":4, "TSS":2, "pH":3, "COD":2, "NH3N":2},
-      "chart_value_range": [[0.1],[0.1],[100],[100]],
+      "float_precission": {"Flow":4, "TSS":2, "pH":3, "COD":2, "NH3N":2},
+      "chart_value_range": [[0.1],[10],[1],[10],[10]],
       "chart_domain_range": [[1000],[1000],[1000],[1000],[1000],[1000]],
       "chart_domain": "y",
       "max_lost": 900000

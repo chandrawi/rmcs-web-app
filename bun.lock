@@ -6,7 +6,7 @@
       "name": "vite-template-solid",
       "dependencies": {
         "@solidjs/router": "^0.13.5",
-        "bbthings_grpc": "file:/home/chandra/backbone_things_api/grpc_api/client_web",
+        "bbthings_grpc": "file:/home/inbaha/backbone_things_api/grpc_api/client_web",
         "google-protobuf": "^3.21.4",
         "grpc-web": "^2.0.2",
         "solid-js": "^1.8.11",
@@ -285,7 +285,7 @@
 
     "balanced-match": ["balanced-match@1.0.2", "", {}, "sha512-3oSeUO0TMV67hN1AmbXsK4yaqU7tjiHlbxRDZOpH0KW9+CeX4bRAaX0Anxt0tx2MrpRpWwQaPwIlISEJhYU5Pw=="],
 
-    "bbthings_grpc": ["bbthings_grpc@file:../../../home/chandra/backbone_things_api/grpc_api/client_web", { "dependencies": { "google-protobuf": "^3.21.4", "grpc-web": "^2.0.2" }, "devDependencies": { "@rollup/plugin-commonjs": "^28.0.3", "@rollup/plugin-node-resolve": "^16.0.1", "rollup": "^4.36.0", "rollup-plugin-exclude-dependencies-from-bundle": "^1.1.24" } }],
+    "bbthings_grpc": ["bbthings_grpc@file:../../../home/inbaha/backbone_things_api/grpc_api/client_web", { "dependencies": { "google-protobuf": "^3.21.4", "grpc-web": "^2.0.2" }, "devDependencies": { "@rollup/plugin-commonjs": "^28.0.3", "@rollup/plugin-node-resolve": "^16.0.1", "rollup": "^4.36.0", "rollup-plugin-exclude-dependencies-from-bundle": "^1.1.24" } }],
 
     "binary-extensions": ["binary-extensions@2.3.0", "", {}, "sha512-Ceh+7ox5qe7LJuLHoY0feh3pHuUDHAcRUeyL2VYghZwfpkNIy/+8Ocg0a3UuSoYzavmylwuLWQOf3hl0jjMMIw=="],
 

@@ -1,10 +1,10 @@
 {
   "auth": {
-    "address": "http://localhost:9001"
+    "address": "https://api-demo.inbaha.co.id:8001"
   },
   "resource": [
     {
-      "address": "http://localhost:9002",
+      "address": "https://api-demo.inbaha.co.id:8002",
       "id": "910636e0-dfc5-45a4-895a-3fb7d6a5c42c"
     }
   ]
