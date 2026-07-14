@@ -44,18 +44,18 @@ export default function ProfileMenu() {
             <span class="w-full h-8 px-4 flex xl:hidden flex-row items-center font-medium border-t border-slate-200 dark:border-slate-700">
               {userData() ? userData().name : "Username"}
             </span>
-            <a href="/#/user/profile" class="w-full h-8 px-3 flex flex-row items-center border-t border-slate-200 hover:text-sky-800 dark:border-slate-700 dark:hover:text-sky-300">
+            <a class="w-full h-8 px-3 flex flex-row items-center border-t border-slate-200 hover:text-sky-800 dark:border-slate-700 dark:hover:text-sky-300">
               <span class="icon-user text-[1rem] w-5 ml-0.5"></span>
               <span class="ml-1.5">Profile</span>
             </a>
-            <a href="/#/user/message" class="w-full h-8 px-3 flex flex-row items-center border-t border-slate-200 hover:text-sky-800 dark:border-slate-700 dark:hover:text-sky-300">
+            <a class="w-full h-8 px-3 flex flex-row items-center border-t border-slate-200 hover:text-sky-800 dark:border-slate-700 dark:hover:text-sky-300">
               <span class="icon-message text-[1rem] w-5"></span>
               <span class="ml-1.5">Message</span>
               <div class="grow h-full flex flex-row items-center justify-end">
                 {/* <span class="h-4 px-1 bg-red-700 rounded-md text-[0.6875rem] text-gray-100">20</span> */}
               </div>
             </a>
-            <a href="/#/user/task" class="w-full h-8 px-3 flex flex-row items-center border-t border-slate-200 hover:text-sky-800 dark:border-slate-700 dark:hover:text-sky-300">
+            <a class="w-full h-8 px-3 flex flex-row items-center border-t border-slate-200 hover:text-sky-800 dark:border-slate-700 dark:hover:text-sky-300">
               <span class="icon-task text-[1.25rem] w-5"></span>
               <span class="ml-2">Task</span>
               <div class="grow h-full flex flex-row items-center justify-end">

@@ -1,4 +1,4 @@
-import { Router, Route } from "@solidjs/router";
+import { Router, Route, Navigate } from "@solidjs/router";
 import Index from "./components/Index";
 import Dashboard from "./components/Dashboard";
 import Login from "./components/auth/Login";
@@ -25,7 +25,7 @@ function App() {
   return (
     <div classList={{ dark: darkTheme() }} class="drawer md:drawer-open h-[100vh] overflow-hidden">
       <Router>
-        <Route path="/" component={Index} />
+        <Route path="/" component={() => <Navigate href="/login" />} />
         <Route path="/" component={Index}>
           <Route path="/login" component={Login} />
           <Route path="/logout" component={Logout} />

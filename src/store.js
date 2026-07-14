@@ -1,7 +1,7 @@
 import { createSignal, createEffect, createRoot } from "solid-js";
 
 const EXPIRE = 604800;
-export const DEFAULT_DASHBOARD = "testing";
+export const DEFAULT_DASHBOARD = "sparing";
 export const DEFAULT_MENU = "overview";
 
 function createCookie(name, value, seconds) {
