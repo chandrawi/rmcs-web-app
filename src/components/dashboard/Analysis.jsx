@@ -6,6 +6,7 @@ import ItemList from "./ItemList";
 import InclinometerShape from "../analysis/InclinometerShape";
 import SoilMovement from "../analysis/SoilMovement";
 import DisplacementChange from "../analysis/DisplacementChange";
+import SparingSensors from "../analysis/SparingSensors";
 
 export default function Analysis() {
 
@@ -112,6 +113,9 @@ export default function Analysis() {
       </Match>
       <Match when={analysis() && analysisType() == "displacement_change"}>
         <DisplacementChange apiId={apiId()} analysis={analysis()} />
+      </Match>
+      <Match when={analysis() && analysisType() == "sparing_sensors"}>
+        <SparingSensors apiId={apiId()} analysis={analysis()} />
       </Match>
     </Switch>
     </>

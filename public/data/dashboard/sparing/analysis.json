@@ -11,9 +11,19 @@
       "view_mode": "graph",
       "float_precission": {"Flow":4, "TSS":2, "pH":3, "COD":2, "NH3N":2},
       "chart_value_range": [[0.1],[10],[1],[10],[10]],
-      "chart_domain_range": [[1000],[1000],[1000],[1000],[1000],[1000]],
+      "chart_domain_range": [[1000],[1000],[1000],[1000],[1000]],
       "chart_domain": "y",
-      "max_lost": 900000
+      "max_lost": 900000,
+      "time_frame": {
+        "minutely": 60000,
+        "hourly": 3600000,
+        "daily": 86400000
+      },
+      "time_frame_tag": {
+        "minutely": 0,
+        "hourly": 5,
+        "daily": 9
+      }
     }
   }
 }
