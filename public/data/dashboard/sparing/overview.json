@@ -1,6 +1,6 @@
 {
-  "sparing_sensor": {
-    "text": "Sparing sensor",
+  "sparing_sensors": {
+    "text": "Sparing Sensors",
     "icon": "icon-list_square",
     "set_id": {
       "Sparing_Sensor": "0944dd19-a398-495a-bfc1-b5899ce4056c"

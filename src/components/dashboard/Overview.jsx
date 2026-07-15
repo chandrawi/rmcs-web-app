@@ -1,13 +1,14 @@
 import { Show, createResource, createEffect } from "solid-js";
 import { useParams } from "@solidjs/router";
 import { DEFAULT_DASHBOARD } from "../../store";
+import OverviewSparing from "../overview/OverviewSparing";
 
 export default function Overview() {
 
   const params = useParams();
   const dashboardName = () => params.name ? params.name : DEFAULT_DASHBOARD;
-  const analysisType = () => "sparing_sensor";
-  const analysisName = () => "Sparing Sensor";
+  const analysisType = () => "sparing_sensors";
+  const analysisName = () => "Sparing_Sensor";
 
   const [dashboard] = createResource(dashboardName, async (name) => {
     const response = await fetch(`/data/dashboard/${name}/dashboard.json`);
@@ -46,9 +47,14 @@ export default function Overview() {
     }
   };
 
+  // createEffect(() => {
+  //   console.log(analyses());
+  //   console.log(analysis());
+  // });
+
   return (
     <Show when={analysis()}>
-      
+      <OverviewSparing apiId={apiId()} analysis={analysis()} />
     </Show>
   );
 }
